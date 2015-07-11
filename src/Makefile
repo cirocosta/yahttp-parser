@@ -1,14 +1,14 @@
 CXX = /usr/bin/clang++-3.5
 LEX		= flex
-YACC	= bison -y
+YACC	= bison
 
 CXXFLAGS = -Wall -g -std=c++11
-YFLAGS = -d
+YFLAGS = -y -d
 LFLAGS =
 
 TESTS_D = ./tests
 
-all: scanner.o parser.o test.out
+all: test.out
 
 scanner.o: scanner.cc
 parser.o: parser.cc
