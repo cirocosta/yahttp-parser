@@ -2,7 +2,7 @@ CXX = /usr/bin/clang++-3.5
 LEX		= flex
 YACC	= bison
 
-CXXFLAGS = -Wall -g -std=c++11
+CXXFLAGS = -Wall -g -std=c++11 -Wno-deprecated-register
 YFLAGS = -y -d
 LFLAGS =
 
@@ -14,7 +14,7 @@ scanner.o: scanner.cc
 parser.o: parser.cc
 driver.o: driver.cc
 
-test.out: $(TESTS_D)/test.cc scanner.o parser.o driver.o
+test.out: $(TESTS_D)/test.cc parser.o scanner.o driver.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 %.o: %.cc
@@ -31,5 +31,6 @@ parser.cc: parser.yy
 
 clean:
 	find . -name "*.out" -delete & \
-	find . -name "*.o" -delete &
+	find . -name "*.o" -delete & \
+	$(RM) scanner.cc parser.cc parser.hh && touch parser.hh
 

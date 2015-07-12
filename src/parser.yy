@@ -2,7 +2,7 @@
 %require "3.0.4"
 
 %defines
-%define parser_class_name {calcxx_parser}
+%define parser_class_name {HTTPParser}
 %define api.token.constructor
 %define api.value.type variant
 %define parse.assert
@@ -10,11 +10,11 @@
 %code requires
 {
 #include <string>
-class calcxx_driver;
+class HTTPDriver;
 }
 
 // passing the parsing context
-%param { calcxx_driver& driver }
+%param { HTTPDriver& driver }
 
 %locations
 %initial-action
@@ -74,7 +74,7 @@ exp:
 
 
 void
-yy::calcxx_parser::error (const location_type& l,
+yy::HTTPParser::error (const location_type& l,
                           const std::string& m)
 {
   driver.error(l, m);

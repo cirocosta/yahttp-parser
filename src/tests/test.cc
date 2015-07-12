@@ -1,16 +1,10 @@
 #include <iostream>
 #include "../driver.hh"
 
-int main(int argc, char *argv[])
+int main()
 {
-  if (argc < 2) {
-    std::cerr << "parser requires at least 1 arg." << std::endl;
-    exit(EXIT_FAILURE);
-  }
-
-  calcxx_driver driver;
-  driver.parse(argv[1]);
-
+  HTTPDriver driver;
+  driver.parse("./tests/get-req.txt");
 
   for (auto it = driver.variables.cbegin();
        it != driver.variables.cend(); ++it) {

@@ -43,7 +43,7 @@
 #line 11 "parser.yy" // lalr1.cc:377
 
 #include <string>
-class calcxx_driver;
+class HTTPDriver;
 
 #line 49 "parser.hh" // lalr1.cc:377
 
@@ -282,7 +282,7 @@ namespace yy {
 
 
   /// A Bison parser.
-  class calcxx_parser
+  class HTTPParser
   {
   public:
 #ifndef YYSTYPE
@@ -477,8 +477,8 @@ namespace yy {
 
 
     /// Build a parser object.
-    calcxx_parser (calcxx_driver& driver_yyarg);
-    virtual ~calcxx_parser ();
+    HTTPParser (HTTPDriver& driver_yyarg);
+    virtual ~HTTPParser ();
 
     /// Parse.
     /// \returns  0 iff parsing succeeded.
@@ -508,8 +508,8 @@ namespace yy {
 
   private:
     /// This class is not copyable.
-    calcxx_parser (const calcxx_parser&);
-    calcxx_parser& operator= (const calcxx_parser&);
+    HTTPParser (const HTTPParser&);
+    HTTPParser& operator= (const HTTPParser&);
 
     /// State numbers.
     typedef int state_type;
@@ -690,13 +690,13 @@ namespace yy {
 
 
     // User arguments.
-    calcxx_driver& driver;
+    HTTPDriver& driver;
   };
 
   // Symbol number corresponding to token number t.
   inline
-  calcxx_parser::token_number_type
-  calcxx_parser::yytranslate_ (token_type t)
+  HTTPParser::token_number_type
+  HTTPParser::yytranslate_ (token_type t)
   {
     static
     const token_number_type
@@ -742,7 +742,7 @@ namespace yy {
   }
 
   inline
-  calcxx_parser::syntax_error::syntax_error (const location_type& l, const std::string& m)
+  HTTPParser::syntax_error::syntax_error (const location_type& l, const std::string& m)
     : std::runtime_error (m)
     , location (l)
   {}
@@ -750,13 +750,13 @@ namespace yy {
   // basic_symbol.
   template <typename Base>
   inline
-  calcxx_parser::basic_symbol<Base>::basic_symbol ()
+  HTTPParser::basic_symbol<Base>::basic_symbol ()
     : value ()
   {}
 
   template <typename Base>
   inline
-  calcxx_parser::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
+  HTTPParser::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
     : Base (other)
     , value ()
     , location (other.location)
@@ -781,7 +781,7 @@ namespace yy {
 
   template <typename Base>
   inline
-  calcxx_parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
+  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
     : Base (t)
     , value ()
     , location (l)
@@ -807,21 +807,21 @@ namespace yy {
   // Implementation of basic_symbol constructor for each type.
 
   template <typename Base>
-  calcxx_parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
+  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
     : Base (t)
     , value ()
     , location (l)
   {}
 
   template <typename Base>
-  calcxx_parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const int v, const location_type& l)
+  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const int v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
   {}
 
   template <typename Base>
-  calcxx_parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l)
+  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
@@ -830,7 +830,7 @@ namespace yy {
 
   template <typename Base>
   inline
-  calcxx_parser::basic_symbol<Base>::~basic_symbol ()
+  HTTPParser::basic_symbol<Base>::~basic_symbol ()
   {
     clear ();
   }
@@ -838,7 +838,7 @@ namespace yy {
   template <typename Base>
   inline
   void
-  calcxx_parser::basic_symbol<Base>::clear ()
+  HTTPParser::basic_symbol<Base>::clear ()
   {
     // User destructor.
     symbol_number_type yytype = this->type_get ();
@@ -872,7 +872,7 @@ namespace yy {
   template <typename Base>
   inline
   bool
-  calcxx_parser::basic_symbol<Base>::empty () const
+  HTTPParser::basic_symbol<Base>::empty () const
   {
     return Base::type_get () == empty_symbol;
   }
@@ -880,7 +880,7 @@ namespace yy {
   template <typename Base>
   inline
   void
-  calcxx_parser::basic_symbol<Base>::move (basic_symbol& s)
+  HTTPParser::basic_symbol<Base>::move (basic_symbol& s)
   {
     super_type::move(s);
       switch (this->type_get ())
@@ -903,30 +903,30 @@ namespace yy {
 
   // by_type.
   inline
-  calcxx_parser::by_type::by_type ()
+  HTTPParser::by_type::by_type ()
     : type (empty_symbol)
   {}
 
   inline
-  calcxx_parser::by_type::by_type (const by_type& other)
+  HTTPParser::by_type::by_type (const by_type& other)
     : type (other.type)
   {}
 
   inline
-  calcxx_parser::by_type::by_type (token_type t)
+  HTTPParser::by_type::by_type (token_type t)
     : type (yytranslate_ (t))
   {}
 
   inline
   void
-  calcxx_parser::by_type::clear ()
+  HTTPParser::by_type::clear ()
   {
     type = empty_symbol;
   }
 
   inline
   void
-  calcxx_parser::by_type::move (by_type& that)
+  HTTPParser::by_type::move (by_type& that)
   {
     type = that.type;
     that.clear ();
@@ -934,14 +934,14 @@ namespace yy {
 
   inline
   int
-  calcxx_parser::by_type::type_get () const
+  HTTPParser::by_type::type_get () const
   {
     return type;
   }
 
   inline
-  calcxx_parser::token_type
-  calcxx_parser::by_type::token () const
+  HTTPParser::token_type
+  HTTPParser::by_type::token () const
   {
     // YYTOKNUM[NUM] -- (External) token number corresponding to the
     // (internal) symbol number NUM (which must be that of a token).  */
@@ -955,62 +955,62 @@ namespace yy {
     return static_cast<token_type> (yytoken_number_[type]);
   }
   // Implementation of make_symbol for each symbol type.
-  calcxx_parser::symbol_type
-  calcxx_parser::make_END (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_END (const location_type& l)
   {
     return symbol_type (token::TOK_END, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_ASSIGN (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_ASSIGN (const location_type& l)
   {
     return symbol_type (token::TOK_ASSIGN, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_MINUS (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_MINUS (const location_type& l)
   {
     return symbol_type (token::TOK_MINUS, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_PLUS (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_PLUS (const location_type& l)
   {
     return symbol_type (token::TOK_PLUS, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_STAR (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_STAR (const location_type& l)
   {
     return symbol_type (token::TOK_STAR, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_SLASH (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_SLASH (const location_type& l)
   {
     return symbol_type (token::TOK_SLASH, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_LPAREN (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_LPAREN (const location_type& l)
   {
     return symbol_type (token::TOK_LPAREN, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_RPAREN (const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_RPAREN (const location_type& l)
   {
     return symbol_type (token::TOK_RPAREN, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_IDENTIFIER (const std::string& v, const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_IDENTIFIER (const std::string& v, const location_type& l)
   {
     return symbol_type (token::TOK_IDENTIFIER, v, l);
   }
 
-  calcxx_parser::symbol_type
-  calcxx_parser::make_NUMBER (const int& v, const location_type& l)
+  HTTPParser::symbol_type
+  HTTPParser::make_NUMBER (const int& v, const location_type& l)
   {
     return symbol_type (token::TOK_NUMBER, v, l);
   }

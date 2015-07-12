@@ -956,37 +956,37 @@ loc.lines (yyleng); loc.step ();
 case 3:
 YY_RULE_SETUP
 #line 38 "scanner.ll"
-return yy::calcxx_parser::make_MINUS(loc);
+return yy::HTTPParser::make_MINUS(loc);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 39 "scanner.ll"
-return yy::calcxx_parser::make_PLUS(loc);
+return yy::HTTPParser::make_PLUS(loc);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 40 "scanner.ll"
-return yy::calcxx_parser::make_STAR(loc);
+return yy::HTTPParser::make_STAR(loc);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 41 "scanner.ll"
-return yy::calcxx_parser::make_SLASH(loc);
+return yy::HTTPParser::make_SLASH(loc);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 42 "scanner.ll"
-return yy::calcxx_parser::make_LPAREN(loc);
+return yy::HTTPParser::make_LPAREN(loc);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 43 "scanner.ll"
-return yy::calcxx_parser::make_RPAREN(loc);
+return yy::HTTPParser::make_RPAREN(loc);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 44 "scanner.ll"
-return yy::calcxx_parser::make_ASSIGN(loc);
+return yy::HTTPParser::make_ASSIGN(loc);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
@@ -996,13 +996,13 @@ YY_RULE_SETUP
   long n = strtol (yytext, NULL, 10);
   if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
     driver.error(loc, "integer is out of range");
-  return yy::calcxx_parser::make_NUMBER(n, loc);
+  return yy::HTTPParser::make_NUMBER(n, loc);
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 55 "scanner.ll"
-return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);
+return yy::HTTPParser::make_IDENTIFIER(yytext, loc);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
@@ -1011,7 +1011,7 @@ driver.error(loc, "invalid character");
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 #line 57 "scanner.ll"
-return yy::calcxx_parser::make_END(loc);
+return yy::HTTPParser::make_END(loc);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
@@ -2114,7 +2114,7 @@ void yyfree (void * ptr )
 
 
 void
-calcxx_driver::scan_begin ()
+HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
   if (file.empty () || file == "-")
@@ -2127,7 +2127,7 @@ calcxx_driver::scan_begin ()
 
 
 void
-calcxx_driver::scan_end ()
+HTTPDriver::scan_end ()
 {
   fclose(yyin);
 }

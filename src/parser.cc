@@ -147,7 +147,7 @@ namespace yy {
      apostrophe, a comma, or backslash (other than backslash-backslash).
      YYSTR is taken from yytname.  */
   std::string
-  calcxx_parser::yytnamerr_ (const char *yystr)
+  HTTPParser::yytnamerr_ (const char *yystr)
   {
     if (*yystr == '"')
       {
@@ -180,7 +180,7 @@ namespace yy {
 
 
   /// Build a parser object.
-  calcxx_parser::calcxx_parser (calcxx_driver& driver_yyarg)
+  HTTPParser::HTTPParser (HTTPDriver& driver_yyarg)
     :
 #if YYDEBUG
       yydebug_ (false),
@@ -189,7 +189,7 @@ namespace yy {
       driver (driver_yyarg)
   {}
 
-  calcxx_parser::~calcxx_parser ()
+  HTTPParser::~HTTPParser ()
   {}
 
 
@@ -201,38 +201,38 @@ namespace yy {
 
   // by_state.
   inline
-  calcxx_parser::by_state::by_state ()
+  HTTPParser::by_state::by_state ()
     : state (empty_state)
   {}
 
   inline
-  calcxx_parser::by_state::by_state (const by_state& other)
+  HTTPParser::by_state::by_state (const by_state& other)
     : state (other.state)
   {}
 
   inline
   void
-  calcxx_parser::by_state::clear ()
+  HTTPParser::by_state::clear ()
   {
     state = empty_state;
   }
 
   inline
   void
-  calcxx_parser::by_state::move (by_state& that)
+  HTTPParser::by_state::move (by_state& that)
   {
     state = that.state;
     that.clear ();
   }
 
   inline
-  calcxx_parser::by_state::by_state (state_type s)
+  HTTPParser::by_state::by_state (state_type s)
     : state (s)
   {}
 
   inline
-  calcxx_parser::symbol_number_type
-  calcxx_parser::by_state::type_get () const
+  HTTPParser::symbol_number_type
+  HTTPParser::by_state::type_get () const
   {
     if (state == empty_state)
       return empty_symbol;
@@ -241,12 +241,12 @@ namespace yy {
   }
 
   inline
-  calcxx_parser::stack_symbol_type::stack_symbol_type ()
+  HTTPParser::stack_symbol_type::stack_symbol_type ()
   {}
 
 
   inline
-  calcxx_parser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
+  HTTPParser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
     : super_type (s, that.location)
   {
       switch (that.type_get ())
@@ -269,8 +269,8 @@ namespace yy {
   }
 
   inline
-  calcxx_parser::stack_symbol_type&
-  calcxx_parser::stack_symbol_type::operator= (const stack_symbol_type& that)
+  HTTPParser::stack_symbol_type&
+  HTTPParser::stack_symbol_type::operator= (const stack_symbol_type& that)
   {
     state = that.state;
       switch (that.type_get ())
@@ -296,7 +296,7 @@ namespace yy {
   template <typename Base>
   inline
   void
-  calcxx_parser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
+  HTTPParser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
   {
     if (yymsg)
       YY_SYMBOL_PRINT (yymsg, yysym);
@@ -305,7 +305,7 @@ namespace yy {
 #if YYDEBUG
   template <typename Base>
   void
-  calcxx_parser::yy_print_ (std::ostream& yyo,
+  HTTPParser::yy_print_ (std::ostream& yyo,
                                      const basic_symbol<Base>& yysym) const
   {
     std::ostream& yyoutput = yyo;
@@ -351,7 +351,7 @@ namespace yy {
 
   inline
   void
-  calcxx_parser::yypush_ (const char* m, state_type s, symbol_type& sym)
+  HTTPParser::yypush_ (const char* m, state_type s, symbol_type& sym)
   {
     stack_symbol_type t (s, sym);
     yypush_ (m, t);
@@ -359,7 +359,7 @@ namespace yy {
 
   inline
   void
-  calcxx_parser::yypush_ (const char* m, stack_symbol_type& s)
+  HTTPParser::yypush_ (const char* m, stack_symbol_type& s)
   {
     if (m)
       YY_SYMBOL_PRINT (m, s);
@@ -368,40 +368,40 @@ namespace yy {
 
   inline
   void
-  calcxx_parser::yypop_ (unsigned int n)
+  HTTPParser::yypop_ (unsigned int n)
   {
     yystack_.pop (n);
   }
 
 #if YYDEBUG
   std::ostream&
-  calcxx_parser::debug_stream () const
+  HTTPParser::debug_stream () const
   {
     return *yycdebug_;
   }
 
   void
-  calcxx_parser::set_debug_stream (std::ostream& o)
+  HTTPParser::set_debug_stream (std::ostream& o)
   {
     yycdebug_ = &o;
   }
 
 
-  calcxx_parser::debug_level_type
-  calcxx_parser::debug_level () const
+  HTTPParser::debug_level_type
+  HTTPParser::debug_level () const
   {
     return yydebug_;
   }
 
   void
-  calcxx_parser::set_debug_level (debug_level_type l)
+  HTTPParser::set_debug_level (debug_level_type l)
   {
     yydebug_ = l;
   }
 #endif // YYDEBUG
 
-  inline calcxx_parser::state_type
-  calcxx_parser::yy_lr_goto_state_ (state_type yystate, int yysym)
+  inline HTTPParser::state_type
+  HTTPParser::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
     int yyr = yypgoto_[yysym - yyntokens_] + yystate;
     if (0 <= yyr && yyr <= yylast_ && yycheck_[yyr] == yystate)
@@ -411,19 +411,19 @@ namespace yy {
   }
 
   inline bool
-  calcxx_parser::yy_pact_value_is_default_ (int yyvalue)
+  HTTPParser::yy_pact_value_is_default_ (int yyvalue)
   {
     return yyvalue == yypact_ninf_;
   }
 
   inline bool
-  calcxx_parser::yy_table_value_is_error_ (int yyvalue)
+  HTTPParser::yy_table_value_is_error_ (int yyvalue)
   {
     return yyvalue == yytable_ninf_;
   }
 
   int
-  calcxx_parser::parse ()
+  HTTPParser::parse ()
   {
     // State.
     int yyn;
@@ -793,14 +793,14 @@ namespace yy {
   }
 
   void
-  calcxx_parser::error (const syntax_error& yyexc)
+  HTTPParser::error (const syntax_error& yyexc)
   {
     error (yyexc.location, yyexc.what());
   }
 
   // Generate an error message.
   std::string
-  calcxx_parser::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
+  HTTPParser::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
   {
     // Number of reported tokens (one for the "unexpected", one per
     // "expected").
@@ -895,12 +895,12 @@ namespace yy {
   }
 
 
-  const signed char calcxx_parser::yypact_ninf_ = -5;
+  const signed char HTTPParser::yypact_ninf_ = -5;
 
-  const signed char calcxx_parser::yytable_ninf_ = -1;
+  const signed char HTTPParser::yytable_ninf_ = -1;
 
   const signed char
-  calcxx_parser::yypact_[] =
+  HTTPParser::yypact_[] =
   {
       -5,     5,     9,    -5,    13,    15,    -5,    -5,     8,    -5,
       -3,    13,    13,    13,    13,    13,    -5,     8,    19,    19,
@@ -908,7 +908,7 @@ namespace yy {
   };
 
   const unsigned char
-  calcxx_parser::yydefact_[] =
+  HTTPParser::yydefact_[] =
   {
        3,     0,     0,     1,     0,    11,    12,     4,     2,    11,
        0,     0,     0,     0,     0,     0,    10,     5,     7,     6,
@@ -916,19 +916,19 @@ namespace yy {
   };
 
   const signed char
-  calcxx_parser::yypgoto_[] =
+  HTTPParser::yypgoto_[] =
   {
       -5,    -5,    -5,    -5,    -4
   };
 
   const signed char
-  calcxx_parser::yydefgoto_[] =
+  HTTPParser::yydefgoto_[] =
   {
       -1,     1,     2,     7,     8
   };
 
   const unsigned char
-  calcxx_parser::yytable_[] =
+  HTTPParser::yytable_[] =
   {
       10,    12,    13,    14,    15,     3,    16,    17,    18,    19,
       20,    21,    12,    13,    14,    15,     0,     4,    11,     5,
@@ -936,7 +936,7 @@ namespace yy {
   };
 
   const signed char
-  calcxx_parser::yycheck_[] =
+  HTTPParser::yycheck_[] =
   {
        4,     4,     5,     6,     7,     0,     9,    11,    12,    13,
       14,    15,     4,     5,     6,     7,    -1,     8,     3,    10,
@@ -944,7 +944,7 @@ namespace yy {
   };
 
   const unsigned char
-  calcxx_parser::yystos_[] =
+  HTTPParser::yystos_[] =
   {
        0,    13,    14,     0,     8,    10,    11,    15,    16,    10,
       16,     3,     4,     5,     6,     7,     9,    16,    16,    16,
@@ -952,14 +952,14 @@ namespace yy {
   };
 
   const unsigned char
-  calcxx_parser::yyr1_[] =
+  HTTPParser::yyr1_[] =
   {
        0,    12,    13,    14,    14,    15,    16,    16,    16,    16,
       16,    16,    16
   };
 
   const unsigned char
-  calcxx_parser::yyr2_[] =
+  HTTPParser::yyr2_[] =
   {
        0,     2,     2,     0,     2,     3,     3,     3,     3,     3,
        3,     1,     1
@@ -970,7 +970,7 @@ namespace yy {
   // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
   // First, the terminals, then, starting at \a yyntokens_, nonterminals.
   const char*
-  const calcxx_parser::yytname_[] =
+  const HTTPParser::yytname_[] =
   {
   "\"end of file\"", "error", "$undefined", "\":=\"", "\"-\"", "\"+\"",
   "\"*\"", "\"/\"", "\"(\"", "\")\"", "\"identifier\"", "\"number\"",
@@ -979,7 +979,7 @@ namespace yy {
 
 #if YYDEBUG
   const unsigned char
-  calcxx_parser::yyrline_[] =
+  HTTPParser::yyrline_[] =
   {
        0,    54,    54,    57,    58,    61,    66,    67,    68,    69,
       70,    71,    72
@@ -987,7 +987,7 @@ namespace yy {
 
   // Print the state stack on the debug stream.
   void
-  calcxx_parser::yystack_print_ ()
+  HTTPParser::yystack_print_ ()
   {
     *yycdebug_ << "Stack now";
     for (stack_type::const_iterator
@@ -1000,7 +1000,7 @@ namespace yy {
 
   // Report on the debug stream that the rule \a yyrule is going to be reduced.
   void
-  calcxx_parser::yy_reduce_print_ (int yyrule)
+  HTTPParser::yy_reduce_print_ (int yyrule)
   {
     unsigned int yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
@@ -1023,7 +1023,7 @@ namespace yy {
 
 
 void
-yy::calcxx_parser::error (const location_type& l,
+yy::HTTPParser::error (const location_type& l,
                           const std::string& m)
 {
   driver.error(l, m);

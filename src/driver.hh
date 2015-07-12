@@ -1,20 +1,20 @@
-#ifndef CALV_HH
-#define CALV_HH
+#ifndef HTTPDRIVER_HH
+#define HTTPDRIVER_HH
 
 #include <string>
 #include <map>
 #include "parser.hh"
 
 #define YY_DECL \
-  yy::calcxx_parser::symbol_type yylex (calcxx_driver& driver)
+  yy::HTTPParser::symbol_type yylex (HTTPDriver& driver)
 
 YY_DECL;
 
-class calcxx_driver
+class HTTPDriver
 {
 public:
-  calcxx_driver();
-  virtual ~calcxx_driver();
+  HTTPDriver();
+  virtual ~HTTPDriver();
 
   std::map<std::string, int> variables;
 
