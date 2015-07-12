@@ -26,7 +26,7 @@ EOL         \n
 
 %{
   // Code run each time a pattern is matched.
-  #define YY_USER_ACTION  loc.columns (yyleng);
+  #define YY_USER_ACTION  loc.columns(yyleng);
 %}
 
 %%
@@ -36,7 +36,10 @@ EOL         \n
   loc.step();
 %}
 
-{SP}            return yy::HTTPParser::make_SP(loc);
+{SP}            {
+                  loc.step();
+                  return yy::HTTPParser::make_SP(loc);
+                }
 
 {EOL}           {
                   loc.lines(yyleng); loc.step();
@@ -48,11 +51,17 @@ EOL         \n
                       strdup(yytext), loc);
                 }
 
-{METHOD}        return yy::HTTPParser::make_METHOD(HTTPMethod::GET, loc);
+{METHOD}        {
+                  return yy::HTTPParser::make_METHOD(
+                      HTTPMethodMapping[yytext], loc
+                  );
+                }
+
 {PATH}          return yy::HTTPParser::make_PATH(strdup(yytext), loc);
 
 .               driver.error(loc, "Invalid Character");
-<<EOF>>         return yy::HTTPParser::make_EOF(loc);
+
+<<EOF>>         return yy::HTTPParser::make_END(loc);
 
 %%
 

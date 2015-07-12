@@ -33,26 +33,29 @@
 
 %define api.token.prefix {HTTP_}
 
-%token EOL EOF SP
+%token END 0 "End of File (EOF)"
+%token EOL SP
 %token <HTTPMethod> METHOD
 %token <std::string> PATH HTTP_VERSION
 
 %type <HTTPStartLine> start_line;
 
-%start http_message
 
 %%
-http_message: start_line                        { printf("end\n");  };
+%start http_message;
+
+http_message: start_line EOL {}
+            | %empty
+            ;
 
 start_line: METHOD SP
             PATH SP
-            HTTP_VERSION EOL  {
-                                driver.start_line.method = $1;
-                                driver.start_line.version_major = 1;
-                                driver.start_line.version_minor = 1;
-                              }
+            HTTP_VERSION {
+                            driver.start_line.method = $1;
+                            driver.start_line.version_major = 1;
+                            driver.start_line.version_minor = 1;
+                          }
           ;
-
 %%
 
 void yy::HTTPParser::error (const location_type& l, const std::string& m)

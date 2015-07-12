@@ -251,16 +251,16 @@ namespace yy {
   {
       switch (that.type_get ())
     {
-      case 6: // METHOD
+      case 5: // METHOD
         value.move< HTTPMethod > (that.value);
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         value.move< HTTPStartLine > (that.value);
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         value.move< std::string > (that.value);
         break;
 
@@ -279,16 +279,16 @@ namespace yy {
     state = that.state;
       switch (that.type_get ())
     {
-      case 6: // METHOD
+      case 5: // METHOD
         value.copy< HTTPMethod > (that.value);
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         value.copy< HTTPStartLine > (that.value);
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         value.copy< std::string > (that.value);
         break;
 
@@ -529,16 +529,16 @@ namespace yy {
          when using variants.  */
         switch (yyr1_[yyn])
     {
-      case 6: // METHOD
+      case 5: // METHOD
         yylhs.value.build< HTTPMethod > ();
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         yylhs.value.build< HTTPStartLine > ();
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         yylhs.value.build< std::string > ();
         break;
 
@@ -560,18 +560,18 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 45 "parser.yy" // lalr1.cc:859
-    { printf("end\n");  }
+#line 47 "parser.yy" // lalr1.cc:859
+    {}
 #line 566 "parser.cc" // lalr1.cc:859
     break;
 
-  case 3:
-#line 49 "parser.yy" // lalr1.cc:859
+  case 4:
+#line 53 "parser.yy" // lalr1.cc:859
     {
-                                driver.start_line.method = yystack_[5].value.as< HTTPMethod > ();
-                                driver.start_line.version_major = 1;
-                                driver.start_line.version_minor = 1;
-                              }
+                            driver.start_line.method = yystack_[4].value.as< HTTPMethod > ();
+                            driver.start_line.version_major = 1;
+                            driver.start_line.version_minor = 1;
+                          }
 #line 576 "parser.cc" // lalr1.cc:859
     break;
 
@@ -831,26 +831,26 @@ namespace yy {
   }
 
 
-  const signed char HTTPParser::yypact_ninf_ = -7;
+  const signed char HTTPParser::yypact_ninf_ = -6;
 
   const signed char HTTPParser::yytable_ninf_ = -1;
 
   const signed char
   HTTPParser::yypact_[] =
   {
-      -6,    -4,     2,    -7,    -3,    -7,    -2,    -1,     3,    -7
+      -5,    -3,     2,     0,    -2,    -6,    -6,     1,    -1,    -6
   };
 
   const unsigned char
   HTTPParser::yydefact_[] =
   {
-       0,     0,     0,     2,     0,     1,     0,     0,     0,     3
+       3,     0,     0,     0,     0,     1,     2,     0,     0,     4
   };
 
   const signed char
   HTTPParser::yypgoto_[] =
   {
-      -7,    -7,    -7
+      -6,    -6,    -6
   };
 
   const signed char
@@ -862,31 +862,31 @@ namespace yy {
   const unsigned char
   HTTPParser::yytable_[] =
   {
-       1,     4,     5,     7,     6,     0,     9,     8
+       1,     4,     5,     6,     7,     8,     9
   };
 
-  const signed char
+  const unsigned char
   HTTPParser::yycheck_[] =
   {
-       6,     5,     0,     5,     7,    -1,     3,     8
+       5,     4,     0,     3,     6,     4,     7
   };
 
   const unsigned char
   HTTPParser::yystos_[] =
   {
-       0,     6,    10,    11,     5,     0,     7,     5,     8,     3
+       0,     5,     9,    10,     4,     0,     3,     6,     4,     7
   };
 
   const unsigned char
   HTTPParser::yyr1_[] =
   {
-       0,     9,    10,    11
+       0,     8,     9,     9,    10
   };
 
   const unsigned char
   HTTPParser::yyr2_[] =
   {
-       0,     2,     1,     6
+       0,     2,     2,     0,     5
   };
 
 
@@ -896,15 +896,15 @@ namespace yy {
   const char*
   const HTTPParser::yytname_[] =
   {
-  "$end", "error", "$undefined", "EOL", "EOF", "SP", "METHOD", "PATH",
-  "HTTP_VERSION", "$accept", "http_message", "start_line", YY_NULLPTR
+  "\"End of File (EOF)\"", "error", "$undefined", "EOL", "SP", "METHOD",
+  "PATH", "HTTP_VERSION", "$accept", "http_message", "start_line", YY_NULLPTR
   };
 
 #if YYDEBUG
   const unsigned char
   HTTPParser::yyrline_[] =
   {
-       0,    45,    45,    47
+       0,    47,    47,    48,    51
   };
 
   // Print the state stack on the debug stream.
@@ -940,7 +940,7 @@ namespace yy {
 
 } // yy
 #line 943 "parser.cc" // lalr1.cc:1167
-#line 56 "parser.yy" // lalr1.cc:1168
+#line 59 "parser.yy" // lalr1.cc:1168
 
 
 void yy::HTTPParser::error (const location_type& l, const std::string& m)

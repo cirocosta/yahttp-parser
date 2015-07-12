@@ -320,12 +320,12 @@ namespace yy {
     {
       enum yytokentype
       {
+        HTTP_END = 0,
         HTTP_EOL = 258,
-        HTTP_EOF = 259,
-        HTTP_SP = 260,
-        HTTP_METHOD = 261,
-        HTTP_PATH = 262,
-        HTTP_HTTP_VERSION = 263
+        HTTP_SP = 259,
+        HTTP_METHOD = 260,
+        HTTP_PATH = 261,
+        HTTP_HTTP_VERSION = 262
       };
     };
 
@@ -438,11 +438,11 @@ namespace yy {
     // Symbol constructors declarations.
     static inline
     symbol_type
-    make_EOL (const location_type& l);
+    make_END (const location_type& l);
 
     static inline
     symbol_type
-    make_EOF (const location_type& l);
+    make_EOL (const location_type& l);
 
     static inline
     symbol_type
@@ -545,7 +545,7 @@ namespace yy {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const signed char yycheck_[];
+  static const unsigned char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -665,12 +665,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 7,     ///< Last index in yytable_.
+      yylast_ = 6,     ///< Last index in yytable_.
       yynnts_ = 3,  ///< Number of nonterminal symbols.
       yyfinal_ = 5, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 9  ///< Number of tokens.
+      yyntokens_ = 8  ///< Number of tokens.
     };
 
 
@@ -713,9 +713,9 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8
+       5,     6,     7
     };
-    const unsigned int user_token_number_max_ = 263;
+    const unsigned int user_token_number_max_ = 262;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -748,16 +748,16 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 6: // METHOD
+      case 5: // METHOD
         value.copy< HTTPMethod > (other.value);
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         value.copy< HTTPStartLine > (other.value);
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         value.copy< std::string > (other.value);
         break;
 
@@ -778,16 +778,16 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 6: // METHOD
+      case 5: // METHOD
         value.copy< HTTPMethod > (v);
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         value.copy< HTTPStartLine > (v);
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         value.copy< std::string > (v);
         break;
 
@@ -853,16 +853,16 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 6: // METHOD
+      case 5: // METHOD
         value.template destroy< HTTPMethod > ();
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         value.template destroy< HTTPStartLine > ();
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         value.template destroy< std::string > ();
         break;
 
@@ -889,16 +889,16 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 6: // METHOD
+      case 5: // METHOD
         value.move< HTTPMethod > (s.value);
         break;
 
-      case 11: // start_line
+      case 10: // start_line
         value.move< HTTPStartLine > (s.value);
         break;
 
-      case 7: // PATH
-      case 8: // HTTP_VERSION
+      case 6: // PATH
+      case 7: // HTTP_VERSION
         value.move< std::string > (s.value);
         break;
 
@@ -957,21 +957,21 @@ namespace yy {
     const unsigned short int
     yytoken_number_[] =
     {
-       0,   256,   257,   258,   259,   260,   261,   262,   263
+       0,   256,   257,   258,   259,   260,   261,   262
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
   // Implementation of make_symbol for each symbol type.
   HTTPParser::symbol_type
-  HTTPParser::make_EOL (const location_type& l)
+  HTTPParser::make_END (const location_type& l)
   {
-    return symbol_type (token::HTTP_EOL, l);
+    return symbol_type (token::HTTP_END, l);
   }
 
   HTTPParser::symbol_type
-  HTTPParser::make_EOF (const location_type& l)
+  HTTPParser::make_EOL (const location_type& l)
   {
-    return symbol_type (token::HTTP_EOF, l);
+    return symbol_type (token::HTTP_EOL, l);
   }
 
   HTTPParser::symbol_type

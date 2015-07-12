@@ -9,8 +9,7 @@ int main()
 {
   HTTPDriver driver;
   driver.parse("./tests/get-req.txt");
-
-  assert(driver.result);
+  assert(!driver.result);
   assert(driver.headers.empty());
   assert(driver.start_line.method == HTTPMethod::GET);
   assert(driver.start_line.version_major == 1);

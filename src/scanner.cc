@@ -564,7 +564,7 @@ int yy_flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[7] =
     {   0,
-       39,   41,   46,   51,   52,   54
+       39,   44,   49,   54,   60,   62
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -595,7 +595,7 @@ static yy::location loc;
 #define YY_NO_INPUT 1
 #line 28 "scanner.ll"
   // Code run each time a pattern is matched.
-  #define YY_USER_ACTION  loc.columns (yyleng);
+  #define YY_USER_ACTION  loc.columns(yyleng);
 #line 600 "scanner.cc"
 
 #define INITIAL 0
@@ -962,12 +962,15 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 39 "scanner.ll"
-return yy::HTTPParser::make_SP(loc);
+{
+                  loc.step();
+                  return yy::HTTPParser::make_SP(loc);
+                }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 41 "scanner.ll"
+#line 44 "scanner.ll"
 {
                   loc.lines(yyleng); loc.step();
                   return yy::HTTPParser::make_EOL(loc);
@@ -975,7 +978,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 46 "scanner.ll"
+#line 49 "scanner.ll"
 {
                   return yy::HTTPParser::make_HTTP_VERSION(
                       strdup(yytext), loc);
@@ -983,29 +986,33 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 51 "scanner.ll"
-return yy::HTTPParser::make_METHOD(HTTPMethod::GET, loc);
+#line 54 "scanner.ll"
+{
+                  return yy::HTTPParser::make_METHOD(
+                      HTTPMethodMapping[yytext], loc
+                  );
+                }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 52 "scanner.ll"
+#line 60 "scanner.ll"
 return yy::HTTPParser::make_PATH(strdup(yytext), loc);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 54 "scanner.ll"
+#line 62 "scanner.ll"
 driver.error(loc, "Invalid Character");
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 55 "scanner.ll"
-return yy::HTTPParser::make_EOF(loc);
+#line 64 "scanner.ll"
+return yy::HTTPParser::make_END(loc);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 57 "scanner.ll"
+#line 66 "scanner.ll"
 ECHO;
 	YY_BREAK
-#line 1009 "scanner.cc"
+#line 1016 "scanner.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2096,7 +2103,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 57 "scanner.ll"
+#line 66 "scanner.ll"
 
 
 

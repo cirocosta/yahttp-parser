@@ -2,7 +2,7 @@
 #include "parser.hh"
 
 HTTPDriver::HTTPDriver ()
-  : trace_scanning(true), trace_parsing(false)
+  : trace_scanning(true), trace_parsing(true)
 { }
 
 HTTPDriver::~HTTPDriver()
