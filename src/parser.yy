@@ -10,7 +10,7 @@
 %code requires
 {
 #include <string>
-class HTTPDriver;
+#include "http_defs.hh"
 }
 
 // passing the parsing context
@@ -31,51 +31,29 @@ class HTTPDriver;
 #include "driver.hh"
 }
 
-%define api.token.prefix {TOK_}
-%token
-  END  0  "end of file"
-  ASSIGN  ":="
-  MINUS   "-"
-  PLUS    "+"
-  STAR    "*"
-  SLASH   "/"
-  LPAREN  "("
-  RPAREN  ")"
-;
+%define api.token.prefix {HTTP_}
 
-%token <std::string> IDENTIFIER "identifier"
-%token <int> NUMBER "number"
-%type <int> exp
+%token EOL SP
+%token <HTTPMethod> METHOD "METHOD"
+%token <unsigned> DIGIT "DIGIT"
+%type <HTTPStartLine> start_line;
 
-%printer { yyoutput << $$; } <*>;
+
+%start unit
 
 %%
-%start unit;
-unit: assignments exp  { driver.result = $2; };
+unit: start_line          { printf("end\n");  }
+    ;
 
-assignments:
-  %empty                 {}
-| assignments assignment {};
+start_line: METHOD SP "/" SP "HTTP/1.1" EOL {
+  driver.start_line.method = $1;
+  driver.start_line.version_major = 1;
+  driver.start_line.version_minor = 1;
+};
 
-assignment:
-  "identifier" ":=" exp { driver.variables[$1] = $3; };
-
-%left "+" "-";
-%left "*" "/";
-exp:
-  exp "+" exp   { $$ = $1 + $3; }
-| exp "-" exp   { $$ = $1 - $3; }
-| exp "*" exp   { $$ = $1 * $3; }
-| exp "/" exp   { $$ = $1 / $3; }
-| "(" exp ")"   { std::swap ($$, $2); }
-| "identifier"  { $$ = driver.variables[$1]; }
-| "number"      { std::swap ($$, $1); };
 %%
 
-
-void
-yy::HTTPParser::error (const location_type& l,
-                          const std::string& m)
+void yy::HTTPParser::error (const location_type& l, const std::string& m)
 {
   driver.error(l, m);
 }

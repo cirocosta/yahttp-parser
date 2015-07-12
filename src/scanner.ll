@@ -4,6 +4,7 @@
 #include <climits>
 #include <cstdlib>
 #include <string>
+
 #include "driver.hh"
 #include "parser.hh"
 
@@ -17,9 +18,11 @@ static yy::location loc;
 
 %option noyywrap nounput batch debug noinput
 
-id    [a-zA-Z][a-zA-Z_0-9]*
-int   [0-9]+
-blank [ \t]
+METHOD      "GET"|"HEAD"|"POST"|"PUT"|"DELETE"|"CONNECT"|"OPTIONS"|"TRACE"
+SP          [ ]
+HTTPversion "HTTP/1.1"
+END         "\n"
+ALPHA       [a-zA-Z\\]+
 
 %{
   // Code run each time a pattern is matched.
@@ -33,28 +36,13 @@ blank [ \t]
   loc.step();
 %}
 
-{blank}+   loc.step ();
-[\n]+      loc.lines (yyleng); loc.step ();
-"-"        return yy::HTTPParser::make_MINUS(loc);
-"+"        return yy::HTTPParser::make_PLUS(loc);
-"*"        return yy::HTTPParser::make_STAR(loc);
-"/"        return yy::HTTPParser::make_SLASH(loc);
-"("        return yy::HTTPParser::make_LPAREN(loc);
-")"        return yy::HTTPParser::make_RPAREN(loc);
-":="       return yy::HTTPParser::make_ASSIGN(loc);
+{SP}           loc.step ();
+EOL            loc.lines (yyleng); loc.step (); return yy::HTTPParser::make_EOL(loc);
+{HTTPversion}  return yy::HTTPParser::make_DIGIT(1, loc);
+{METHOD}       return yy::HTTPParser::make_METHOD(HTTPMethod::GET, loc);
 
-
-{int}      {
-  errno = 0;
-  long n = strtol (yytext, NULL, 10);
-  if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    driver.error(loc, "integer is out of range");
-  return yy::HTTPParser::make_NUMBER(n, loc);
-}
-
-{id}       return yy::HTTPParser::make_IDENTIFIER(yytext, loc);
 .          driver.error(loc, "invalid character");
-<<EOF>>    return yy::HTTPParser::make_END(loc);
+<<EOF>>    return yy::HTTPParser::make_EOL(loc);
 
 %%
 

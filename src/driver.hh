@@ -4,11 +4,13 @@
 #include <string>
 #include <map>
 #include "parser.hh"
+#include "http_defs.hh"
 
 #define YY_DECL \
   yy::HTTPParser::symbol_type yylex (HTTPDriver& driver)
 
 YY_DECL;
+
 
 class HTTPDriver
 {
@@ -16,7 +18,8 @@ public:
   HTTPDriver();
   virtual ~HTTPDriver();
 
-  std::map<std::string, int> variables;
+  std::map<std::string, std::string> headers;
+  HTTPStartLine start_line;
 
   int result;
 

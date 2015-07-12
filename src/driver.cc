@@ -2,15 +2,11 @@
 #include "parser.hh"
 
 HTTPDriver::HTTPDriver ()
-  : trace_scanning(false), trace_parsing(false)
-{
-  variables["one"] = 1;
-  variables["two"] = 2;
-}
+  : trace_scanning(true), trace_parsing(true)
+{ }
 
 HTTPDriver::~HTTPDriver()
-{
-}
+{ }
 
 int HTTPDriver::parse (const std::string &f)
 {

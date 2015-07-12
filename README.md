@@ -162,8 +162,16 @@ field-name    = token
 field-value   = *( field-content )
 field-content = field-vchar [ 1*( SP/HTAB ) field-vchar ]
 field-vchar   = VCHAR
-```
 
+request-target= origin-form
+              / absolute-form
+              / authority-form
+              / asterisk-form
+origin-form   = absolute-path [ "?" query ]
+absolute-form = absolute-URI
+authority-form= authority
+asterisk-form = "*"
+```
 
 
 > The normal procedure for parsing an HTTP message is to read the
