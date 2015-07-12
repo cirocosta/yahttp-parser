@@ -19,10 +19,10 @@ static yy::location loc;
 %option noyywrap nounput batch debug noinput
 
 METHOD      "GET"|"HEAD"|"POST"|"PUT"|"DELETE"|"CONNECT"|"OPTIONS"|"TRACE"
-SP          [ ]
-HTTPversion "HTTP/1.1"
-END         "\n"
-ALPHA       [a-zA-Z\\]+
+SP          " "
+HTTP_VERSION "HTTP/1.1"
+PATH         "/"
+EOL         \n
 
 %{
   // Code run each time a pattern is matched.
@@ -36,31 +36,39 @@ ALPHA       [a-zA-Z\\]+
   loc.step();
 %}
 
-{SP}           loc.step ();
-EOL            loc.lines (yyleng); loc.step (); return yy::HTTPParser::make_EOL(loc);
-{HTTPversion}  return yy::HTTPParser::make_DIGIT(1, loc);
-{METHOD}       return yy::HTTPParser::make_METHOD(HTTPMethod::GET, loc);
+{SP}            return yy::HTTPParser::make_SP(loc);
 
-.          driver.error(loc, "invalid character");
-<<EOF>>    return yy::HTTPParser::make_EOL(loc);
+{EOL}           {
+                  loc.lines(yyleng); loc.step();
+                  return yy::HTTPParser::make_EOL(loc);
+                }
+
+{HTTP_VERSION}  {
+                  return yy::HTTPParser::make_HTTP_VERSION(
+                      strdup(yytext), loc);
+                }
+
+{METHOD}        return yy::HTTPParser::make_METHOD(HTTPMethod::GET, loc);
+{PATH}          return yy::HTTPParser::make_PATH(strdup(yytext), loc);
+
+.               driver.error(loc, "Invalid Character");
+<<EOF>>         return yy::HTTPParser::make_EOF(loc);
 
 %%
 
-void
-HTTPDriver::scan_begin ()
+void HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
   if (file.empty () || file == "-")
     yyin = stdin;
   else if (!(yyin = fopen (file.c_str (), "r"))) {
-    error("cannot open " + file + ": " + strerror(errno));
+    error("Can't open " + file + ": " + strerror(errno));
     exit(EXIT_FAILURE);
   }
 }
 
 
-void
-HTTPDriver::scan_end ()
+void HTTPDriver::scan_end ()
 {
   fclose(yyin);
 }

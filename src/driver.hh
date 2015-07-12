@@ -11,25 +11,29 @@
 
 YY_DECL;
 
-
+/**
+ * Public Interface to the HTTP Parser
+ */
 class HTTPDriver
 {
+public:
+  std::map<std::string, std::string> headers;
+  HTTPStartLine start_line;
+
+  bool trace_scanning;
+  std::string file;
+  bool trace_parsing;
+  int result;
+
 public:
   HTTPDriver();
   virtual ~HTTPDriver();
 
-  std::map<std::string, std::string> headers;
-  HTTPStartLine start_line;
-
-  int result;
+public:
+  void parse(const std::string& file);
 
   void scan_begin();
   void scan_end();
-  bool trace_scanning;
-
-  int parse(const std::string& file);
-  std::string file;
-  bool trace_parsing;
 
   void error(const yy::location& l, const std::string& m);
   void error(const std::string& m);

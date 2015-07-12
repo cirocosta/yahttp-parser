@@ -289,14 +289,15 @@ namespace yy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // "METHOD"
+      // METHOD
       char dummy1[sizeof(HTTPMethod)];
 
       // start_line
       char dummy2[sizeof(HTTPStartLine)];
 
-      // "DIGIT"
-      char dummy3[sizeof(unsigned)];
+      // PATH
+      // HTTP_VERSION
+      char dummy3[sizeof(std::string)];
 };
 
     /// Symbol semantic values.
@@ -320,9 +321,11 @@ namespace yy {
       enum yytokentype
       {
         HTTP_EOL = 258,
-        HTTP_SP = 259,
-        HTTP_METHOD = 260,
-        HTTP_DIGIT = 261
+        HTTP_EOF = 259,
+        HTTP_SP = 260,
+        HTTP_METHOD = 261,
+        HTTP_PATH = 262,
+        HTTP_HTTP_VERSION = 263
       };
     };
 
@@ -364,7 +367,7 @@ namespace yy {
 
   basic_symbol (typename Base::kind_type t, const HTTPStartLine v, const location_type& l);
 
-  basic_symbol (typename Base::kind_type t, const unsigned v, const location_type& l);
+  basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l);
 
 
       /// Constructor for symbols with semantic value.
@@ -439,6 +442,10 @@ namespace yy {
 
     static inline
     symbol_type
+    make_EOF (const location_type& l);
+
+    static inline
+    symbol_type
     make_SP (const location_type& l);
 
     static inline
@@ -447,7 +454,11 @@ namespace yy {
 
     static inline
     symbol_type
-    make_DIGIT (const unsigned& v, const location_type& l);
+    make_PATH (const std::string& v, const location_type& l);
+
+    static inline
+    symbol_type
+    make_HTTP_VERSION (const std::string& v, const location_type& l);
 
 
     /// Build a parser object.
@@ -737,7 +748,7 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 5: // "METHOD"
+      case 6: // METHOD
         value.copy< HTTPMethod > (other.value);
         break;
 
@@ -745,8 +756,9 @@ namespace yy {
         value.copy< HTTPStartLine > (other.value);
         break;
 
-      case 6: // "DIGIT"
-        value.copy< unsigned > (other.value);
+      case 7: // PATH
+      case 8: // HTTP_VERSION
+        value.copy< std::string > (other.value);
         break;
 
       default:
@@ -766,7 +778,7 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 5: // "METHOD"
+      case 6: // METHOD
         value.copy< HTTPMethod > (v);
         break;
 
@@ -774,8 +786,9 @@ namespace yy {
         value.copy< HTTPStartLine > (v);
         break;
 
-      case 6: // "DIGIT"
-        value.copy< unsigned > (v);
+      case 7: // PATH
+      case 8: // HTTP_VERSION
+        value.copy< std::string > (v);
         break;
 
       default:
@@ -808,7 +821,7 @@ namespace yy {
   {}
 
   template <typename Base>
-  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const unsigned v, const location_type& l)
+  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
@@ -840,7 +853,7 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 5: // "METHOD"
+      case 6: // METHOD
         value.template destroy< HTTPMethod > ();
         break;
 
@@ -848,8 +861,9 @@ namespace yy {
         value.template destroy< HTTPStartLine > ();
         break;
 
-      case 6: // "DIGIT"
-        value.template destroy< unsigned > ();
+      case 7: // PATH
+      case 8: // HTTP_VERSION
+        value.template destroy< std::string > ();
         break;
 
       default:
@@ -875,7 +889,7 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 5: // "METHOD"
+      case 6: // METHOD
         value.move< HTTPMethod > (s.value);
         break;
 
@@ -883,8 +897,9 @@ namespace yy {
         value.move< HTTPStartLine > (s.value);
         break;
 
-      case 6: // "DIGIT"
-        value.move< unsigned > (s.value);
+      case 7: // PATH
+      case 8: // HTTP_VERSION
+        value.move< std::string > (s.value);
         break;
 
       default:
@@ -954,6 +969,12 @@ namespace yy {
   }
 
   HTTPParser::symbol_type
+  HTTPParser::make_EOF (const location_type& l)
+  {
+    return symbol_type (token::HTTP_EOF, l);
+  }
+
+  HTTPParser::symbol_type
   HTTPParser::make_SP (const location_type& l)
   {
     return symbol_type (token::HTTP_SP, l);
@@ -966,15 +987,21 @@ namespace yy {
   }
 
   HTTPParser::symbol_type
-  HTTPParser::make_DIGIT (const unsigned& v, const location_type& l)
+  HTTPParser::make_PATH (const std::string& v, const location_type& l)
   {
-    return symbol_type (token::HTTP_DIGIT, v, l);
+    return symbol_type (token::HTTP_PATH, v, l);
+  }
+
+  HTTPParser::symbol_type
+  HTTPParser::make_HTTP_VERSION (const std::string& v, const location_type& l)
+  {
+    return symbol_type (token::HTTP_HTTP_VERSION, v, l);
   }
 
 
 
 } // yy
-#line 978 "parser.hh" // lalr1.cc:377
+#line 1005 "parser.hh" // lalr1.cc:377
 
 
 

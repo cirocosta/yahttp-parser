@@ -33,23 +33,25 @@
 
 %define api.token.prefix {HTTP_}
 
-%token EOL SP
-%token <HTTPMethod> METHOD "METHOD"
-%token <unsigned> DIGIT "DIGIT"
+%token EOL EOF SP
+%token <HTTPMethod> METHOD
+%token <std::string> PATH HTTP_VERSION
+
 %type <HTTPStartLine> start_line;
 
-
-%start unit
+%start http_message
 
 %%
-unit: start_line          { printf("end\n");  }
-    ;
+http_message: start_line                        { printf("end\n");  };
 
-start_line: METHOD SP "/" SP "HTTP/1.1" EOL {
-  driver.start_line.method = $1;
-  driver.start_line.version_major = 1;
-  driver.start_line.version_minor = 1;
-};
+start_line: METHOD SP
+            PATH SP
+            HTTP_VERSION EOL  {
+                                driver.start_line.method = $1;
+                                driver.start_line.version_major = 1;
+                                driver.start_line.version_minor = 1;
+                              }
+          ;
 
 %%
 

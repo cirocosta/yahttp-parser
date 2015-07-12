@@ -455,8 +455,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	(yy_c_buf_p) = yy_cp;
 
 /* %% [4.0] data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 6
-#define YY_END_OF_BUFFER 7
+#define YY_NUM_RULES 7
+#define YY_END_OF_BUFFER 8
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -464,13 +464,13 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[49] =
+static yyconst flex_int16_t yy_accept[47] =
     {   0,
-        0,    0,    7,    5,    6,    1,    5,    5,    5,    5,
-        5,    5,    5,    5,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    2,    4,    0,    0,
+        0,    0,    8,    6,    2,    1,    5,    6,    6,    6,
+        6,    6,    6,    6,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    4,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    3,    0
+        0,    0,    0,    0,    3,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -512,48 +512,48 @@ static yyconst flex_int32_t yy_meta[22] =
         1
     } ;
 
-static yyconst flex_int16_t yy_base[49] =
+static yyconst flex_int16_t yy_base[47] =
     {   0,
-        0,    0,   62,   63,   63,   63,   45,   50,   43,   48,
-       12,   40,    7,   38,   40,   40,   39,   32,   44,   30,
-       29,   29,   27,   39,   30,   34,   63,   63,   34,   25,
-       28,   20,   31,   28,   17,   31,   19,   24,   25,   21,
-       24,   14,    7,   22,    6,   18,   63,   63
+        0,    0,   60,   61,   61,   61,   61,   43,   48,   47,
+       12,   39,    7,   37,   39,   39,   32,   44,   30,   29,
+       29,   27,   39,   30,   34,   61,   34,   25,   28,   20,
+       31,   28,   17,   31,   19,   24,   25,   21,   24,   14,
+        7,   22,    6,   18,   61,   61
     } ;
 
-static yyconst flex_int16_t yy_def[49] =
+static yyconst flex_int16_t yy_def[47] =
     {   0,
-       48,    1,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48,   48,   48,   48,    0
+       46,    1,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,    0
     } ;
 
-static yyconst flex_int16_t yy_nxt[85] =
+static yyconst flex_int16_t yy_nxt[83] =
     {   0,
-        4,    5,    6,    4,    4,    4,    4,    7,    8,    9,
+        4,    5,    6,    4,    7,    4,    4,    8,    9,    4,
        10,   11,    4,    4,    4,   12,   13,    4,    4,   14,
-        4,   19,   22,   47,   28,   46,   28,   23,   45,   44,
-       28,   20,   43,   28,   42,   41,   40,   39,   38,   28,
-       37,   36,   28,   35,   34,   33,   28,   32,   31,   30,
-       29,   28,   27,   26,   25,   24,   21,   18,   17,   16,
-       15,   48,    3,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48
+        4,   18,   21,   45,   26,   44,   26,   22,   43,   42,
+       26,   19,   41,   26,   40,   39,   38,   37,   36,   26,
+       35,   34,   26,   33,   32,   31,   26,   30,   29,   28,
+       27,   26,   25,   24,   23,   20,   17,   16,   15,   46,
+        3,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46
     } ;
 
-static yyconst flex_int16_t yy_chk[85] =
+static yyconst flex_int16_t yy_chk[83] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,   11,   13,   46,   45,   44,   43,   13,   42,   41,
-       40,   11,   39,   38,   37,   36,   35,   34,   33,   32,
-       31,   30,   29,   26,   25,   24,   23,   22,   21,   20,
-       19,   18,   17,   16,   15,   14,   12,   10,    9,    8,
-        7,    3,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,   48,   48
+        1,   11,   13,   44,   43,   42,   41,   13,   40,   39,
+       38,   11,   37,   36,   35,   34,   33,   32,   31,   30,
+       29,   28,   27,   25,   24,   23,   22,   21,   20,   19,
+       18,   17,   16,   15,   14,   12,   10,    9,    8,    3,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -562,9 +562,9 @@ static char *yy_last_accepting_cpos;
 extern int yy_flex_debug;
 int yy_flex_debug = 1;
 
-static yyconst flex_int16_t yy_rule_linenum[6] =
+static yyconst flex_int16_t yy_rule_linenum[7] =
     {   0,
-       39,   40,   41,   42,   44
+       39,   41,   46,   51,   52,   54
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -912,13 +912,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 49 )
+				if ( yy_current_state >= 47 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_current_state != 48 );
+		while ( yy_current_state != 46 );
 		yy_cp = (yy_last_accepting_cpos);
 		yy_current_state = (yy_last_accepting_state);
 
@@ -937,13 +937,13 @@ do_action:	/* This label is used only to access EOF actions. */
 			{
 			if ( yy_act == 0 )
 				fprintf( stderr, "--scanner backing up\n" );
-			else if ( yy_act < 6 )
+			else if ( yy_act < 7 )
 				fprintf( stderr, "--accepting rule at line %ld (\"%s\")\n",
 				         (long)yy_rule_linenum[yy_act], yytext );
-			else if ( yy_act == 6 )
+			else if ( yy_act == 7 )
 				fprintf( stderr, "--accepting default rule (\"%s\")\n",
 				         yytext );
-			else if ( yy_act == 7 )
+			else if ( yy_act == 8 )
 				fprintf( stderr, "--(end of buffer or a NUL)\n" );
 			else
 				fprintf( stderr, "--EOF (start condition %d)\n", YY_START );
@@ -962,38 +962,50 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 39 "scanner.ll"
-loc.step ();
+return yy::HTTPParser::make_SP(loc);
 	YY_BREAK
 case 2:
+/* rule 2 can match eol */
 YY_RULE_SETUP
-#line 40 "scanner.ll"
-loc.lines (yyleng); loc.step (); return yy::HTTPParser::make_EOL(loc);
+#line 41 "scanner.ll"
+{
+                  loc.lines(yyleng); loc.step();
+                  return yy::HTTPParser::make_EOL(loc);
+                }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 41 "scanner.ll"
-return yy::HTTPParser::make_DIGIT(1, loc);
+#line 46 "scanner.ll"
+{
+                  return yy::HTTPParser::make_HTTP_VERSION(
+                      strdup(yytext), loc);
+                }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 42 "scanner.ll"
+#line 51 "scanner.ll"
 return yy::HTTPParser::make_METHOD(HTTPMethod::GET, loc);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 44 "scanner.ll"
-driver.error(loc, "invalid character");
-	YY_BREAK
-case YY_STATE_EOF(INITIAL):
-#line 45 "scanner.ll"
-return yy::HTTPParser::make_EOL(loc);
+#line 52 "scanner.ll"
+return yy::HTTPParser::make_PATH(strdup(yytext), loc);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 47 "scanner.ll"
+#line 54 "scanner.ll"
+driver.error(loc, "Invalid Character");
+	YY_BREAK
+case YY_STATE_EOF(INITIAL):
+#line 55 "scanner.ll"
+return yy::HTTPParser::make_EOF(loc);
+	YY_BREAK
+case 7:
+YY_RULE_SETUP
+#line 57 "scanner.ll"
 ECHO;
 	YY_BREAK
-#line 997 "scanner.cc"
+#line 1009 "scanner.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1305,7 +1317,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 49 )
+			if ( yy_current_state >= 47 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1338,11 +1350,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 49 )
+		if ( yy_current_state >= 47 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 48);
+	yy_is_jam = (yy_current_state == 46);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2084,25 +2096,23 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 47 "scanner.ll"
+#line 57 "scanner.ll"
 
 
 
-void
-HTTPDriver::scan_begin ()
+void HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
   if (file.empty () || file == "-")
     yyin = stdin;
   else if (!(yyin = fopen (file.c_str (), "r"))) {
-    error("cannot open " + file + ": " + strerror(errno));
+    error("Can't open " + file + ": " + strerror(errno));
     exit(EXIT_FAILURE);
   }
 }
 
 
-void
-HTTPDriver::scan_end ()
+void HTTPDriver::scan_end ()
 {
   fclose(yyin);
 }
