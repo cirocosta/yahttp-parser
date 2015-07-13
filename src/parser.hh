@@ -295,9 +295,14 @@ namespace yy {
       // start_line
       char dummy2[sizeof(HTTPStartLine)];
 
+      // STATUS_CODE
+      char dummy3[sizeof(int)];
+
       // PATH
       // HTTP_VERSION
-      char dummy3[sizeof(std::string)];
+      // REASON_PHRASE
+      // reason_phrase
+      char dummy4[sizeof(std::string)];
 };
 
     /// Symbol semantic values.
@@ -325,7 +330,9 @@ namespace yy {
         HTTP_SP = 259,
         HTTP_METHOD = 260,
         HTTP_PATH = 261,
-        HTTP_HTTP_VERSION = 262
+        HTTP_HTTP_VERSION = 262,
+        HTTP_REASON_PHRASE = 263,
+        HTTP_STATUS_CODE = 264
       };
     };
 
@@ -366,6 +373,8 @@ namespace yy {
   basic_symbol (typename Base::kind_type t, const HTTPMethod v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const HTTPStartLine v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const int v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l);
 
@@ -460,6 +469,14 @@ namespace yy {
     symbol_type
     make_HTTP_VERSION (const std::string& v, const location_type& l);
 
+    static inline
+    symbol_type
+    make_REASON_PHRASE (const std::string& v, const location_type& l);
+
+    static inline
+    symbol_type
+    make_STATUS_CODE (const int& v, const location_type& l);
+
 
     /// Build a parser object.
     HTTPParser (HTTPDriver& driver_yyarg);
@@ -545,7 +562,7 @@ namespace yy {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const unsigned char yycheck_[];
+  static const signed char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -665,12 +682,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 6,     ///< Last index in yytable_.
-      yynnts_ = 3,  ///< Number of nonterminal symbols.
-      yyfinal_ = 5, ///< Termination state number.
+      yylast_ = 15,     ///< Last index in yytable_.
+      yynnts_ = 6,  ///< Number of nonterminal symbols.
+      yyfinal_ = 9, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 8  ///< Number of tokens.
+      yyntokens_ = 10  ///< Number of tokens.
     };
 
 
@@ -713,9 +730,9 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7
+       5,     6,     7,     8,     9
     };
-    const unsigned int user_token_number_max_ = 262;
+    const unsigned int user_token_number_max_ = 264;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -752,12 +769,18 @@ namespace yy {
         value.copy< HTTPMethod > (other.value);
         break;
 
-      case 10: // start_line
+      case 12: // start_line
         value.copy< HTTPStartLine > (other.value);
+        break;
+
+      case 9: // STATUS_CODE
+        value.copy< int > (other.value);
         break;
 
       case 6: // PATH
       case 7: // HTTP_VERSION
+      case 8: // REASON_PHRASE
+      case 14: // reason_phrase
         value.copy< std::string > (other.value);
         break;
 
@@ -782,12 +805,18 @@ namespace yy {
         value.copy< HTTPMethod > (v);
         break;
 
-      case 10: // start_line
+      case 12: // start_line
         value.copy< HTTPStartLine > (v);
+        break;
+
+      case 9: // STATUS_CODE
+        value.copy< int > (v);
         break;
 
       case 6: // PATH
       case 7: // HTTP_VERSION
+      case 8: // REASON_PHRASE
+      case 14: // reason_phrase
         value.copy< std::string > (v);
         break;
 
@@ -815,6 +844,13 @@ namespace yy {
 
   template <typename Base>
   HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const HTTPStartLine v, const location_type& l)
+    : Base (t)
+    , value (v)
+    , location (l)
+  {}
+
+  template <typename Base>
+  HTTPParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const int v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
@@ -857,12 +893,18 @@ namespace yy {
         value.template destroy< HTTPMethod > ();
         break;
 
-      case 10: // start_line
+      case 12: // start_line
         value.template destroy< HTTPStartLine > ();
+        break;
+
+      case 9: // STATUS_CODE
+        value.template destroy< int > ();
         break;
 
       case 6: // PATH
       case 7: // HTTP_VERSION
+      case 8: // REASON_PHRASE
+      case 14: // reason_phrase
         value.template destroy< std::string > ();
         break;
 
@@ -893,12 +935,18 @@ namespace yy {
         value.move< HTTPMethod > (s.value);
         break;
 
-      case 10: // start_line
+      case 12: // start_line
         value.move< HTTPStartLine > (s.value);
+        break;
+
+      case 9: // STATUS_CODE
+        value.move< int > (s.value);
         break;
 
       case 6: // PATH
       case 7: // HTTP_VERSION
+      case 8: // REASON_PHRASE
+      case 14: // reason_phrase
         value.move< std::string > (s.value);
         break;
 
@@ -957,7 +1005,7 @@ namespace yy {
     const unsigned short int
     yytoken_number_[] =
     {
-       0,   256,   257,   258,   259,   260,   261,   262
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -998,10 +1046,22 @@ namespace yy {
     return symbol_type (token::HTTP_HTTP_VERSION, v, l);
   }
 
+  HTTPParser::symbol_type
+  HTTPParser::make_REASON_PHRASE (const std::string& v, const location_type& l)
+  {
+    return symbol_type (token::HTTP_REASON_PHRASE, v, l);
+  }
+
+  HTTPParser::symbol_type
+  HTTPParser::make_STATUS_CODE (const int& v, const location_type& l)
+  {
+    return symbol_type (token::HTTP_STATUS_CODE, v, l);
+  }
+
 
 
 } // yy
-#line 1005 "parser.hh" // lalr1.cc:377
+#line 1065 "parser.hh" // lalr1.cc:377
 
 
 

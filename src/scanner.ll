@@ -18,11 +18,26 @@ static yy::location loc;
 
 %option noyywrap nounput batch debug noinput
 
-METHOD      "GET"|"HEAD"|"POST"|"PUT"|"DELETE"|"CONNECT"|"OPTIONS"|"TRACE"
-SP          " "
-HTTP_VERSION "HTTP/1.1"
-PATH         "/"
-EOL         \n
+ALPHA               [\x41-\x5A\x61-\x7A]
+BIT                 [01]
+CHAR                [\x01-\x7F]
+DIGIT               [0-9]
+DQUOTE              \x22
+CR                  \x0D
+LF                  \x0A
+CRLF                {CR}{LF}
+SP                  \x20
+HTAB                \x09
+OCTET               [\x00-\xFF]
+VCHAR               [\x21-\x7E]
+WSP                 ({SP}|{HTAB})
+EOL                 \n
+
+HTTP_VERSION        "HTTP/1.1"
+METHOD              ("GET"|"HEAD"|"POST"|"PUT"|"DELETE")
+PATH                "/"
+STATUS_CODE         ({DIGIT}){3}
+REASON_PHRASE       ({ALPHA})+
 
 %{
   // Code run each time a pattern is matched.
@@ -36,14 +51,10 @@ EOL         \n
   loc.step();
 %}
 
-{SP}            {
-                  loc.step();
-                  return yy::HTTPParser::make_SP(loc);
-                }
-
-{EOL}           {
-                  loc.lines(yyleng); loc.step();
-                  return yy::HTTPParser::make_EOL(loc);
+{METHOD}        {
+                  return yy::HTTPParser::make_METHOD(
+                      HTTPMethodMapping.at(yytext), loc
+                  );
                 }
 
 {HTTP_VERSION}  {
@@ -51,13 +62,32 @@ EOL         \n
                       std::string(yytext), loc);
                 }
 
-{METHOD}        {
-                  return yy::HTTPParser::make_METHOD(
-                      HTTPMethodMapping[yytext], loc
-                  );
+{PATH}          return yy::HTTPParser::make_PATH(std::string(yytext), loc);
+
+{STATUS_CODE}   {
+                  errno = 0;
+                  long n = std::strtol(yytext, NULL, 10);
+
+                  if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
+                    driver.error (loc, "integer is out of range");
+
+                  return yy::HTTPParser::make_STATUS_CODE(n, loc);
                 }
 
-{PATH}          return yy::HTTPParser::make_PATH(std::string(yytext), loc);
+{EOL}           {
+                  loc.lines(yyleng); loc.step();
+                  return yy::HTTPParser::make_EOL(loc);
+                }
+
+{SP}|{HTAB}     {
+                  loc.step();
+                  return yy::HTTPParser::make_SP(loc);
+                }
+
+{REASON_PHRASE} {
+                  return yy::HTTPParser::make_REASON_PHRASE(
+                    std::string(yytext),loc);
+                }
 
 .               driver.error(loc, "Invalid Character");
 

@@ -19,8 +19,7 @@ typedef struct yy_buffer_state * YY_BUFFER_STATE;
 class HTTPDriver
 {
 public:
-  std::map<std::string, std::string> headers;
-  HTTPStartLine start_line;
+  HTTPMessage message;
 
   bool trace_scanning;
   std::string file;
@@ -31,6 +30,7 @@ public:
 
 public:
   HTTPDriver();
+  HTTPDriver(bool ts, bool tp);
   virtual ~HTTPDriver();
 
 public:

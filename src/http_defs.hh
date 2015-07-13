@@ -13,7 +13,7 @@ enum class HTTPMethod {
   CONNECT,OPTIONS,TRACE
 };
 
-static std::map<std::string, HTTPMethod> HTTPMethodMapping = {
+static const std::map<std::string, HTTPMethod> HTTPMethodMapping = {
   {"GET", HTTPMethod::GET},
   {"HEAD", HTTPMethod::HEAD},
   {"POST", HTTPMethod::POST},
@@ -25,9 +25,21 @@ static std::map<std::string, HTTPMethod> HTTPMethodMapping = {
 };
 
 struct HTTPStartLine {
+  std::string path;
+  std::string version;
+
   HTTPMethod method;
-  unsigned version_minor;
-  unsigned version_major;
+  unsigned status_code;
+  std::string reason_phrase;
+};
+
+typedef std::map<std::string, std::string> HTTPHeaders;
+typedef std::string HTTPBody;
+
+struct HTTPMessage {
+  HTTPStartLine start_line;
+  HTTPHeaders headers;
+  HTTPBody body;
 };
 
 #endif

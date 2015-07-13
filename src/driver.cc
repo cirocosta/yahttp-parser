@@ -2,8 +2,16 @@
 #include "parser.hh"
 
 HTTPDriver::HTTPDriver ()
-  : trace_scanning(true), trace_parsing(true)
-{ }
+  : trace_scanning(false), trace_parsing(false)
+{
+  message.start_line.reason_phrase = "";
+}
+
+HTTPDriver::HTTPDriver (bool ts, bool tp)
+  : trace_scanning(ts), trace_parsing(tp)
+{
+  message.start_line.reason_phrase = "";
+}
 
 HTTPDriver::~HTTPDriver()
 {
