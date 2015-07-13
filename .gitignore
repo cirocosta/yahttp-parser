@@ -1,3 +1,7 @@
 *.o
 *.out
 *.a
+
+src/scanner.cc
+src/parser.cc
+src/parser.hh

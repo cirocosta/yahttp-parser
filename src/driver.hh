@@ -11,6 +11,8 @@
 
 YY_DECL;
 
+typedef struct yy_buffer_state * YY_BUFFER_STATE;
+
 /**
  * Public Interface to the HTTP Parser
  */
@@ -24,6 +26,7 @@ public:
   std::string file;
   bool trace_parsing;
   int result;
+  YY_BUFFER_STATE buffer;
 
 public:
   HTTPDriver();
@@ -31,9 +34,12 @@ public:
 
 public:
   void parse(const std::string& file);
+  void parse_source(const std::string& file);
 
   void scan_begin();
+  void scan_begin_source(const std::string& source);
   void scan_end();
+  void scan_end_source();
 
   void error(const yy::location& l, const std::string& m);
   void error(const std::string& m);

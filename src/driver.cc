@@ -18,6 +18,14 @@ void HTTPDriver::parse (const std::string &f)
   scan_end();
 }
 
+void HTTPDriver::parse_source (const std::string &source)
+{
+  scan_begin_source(source);
+  yy::HTTPParser parser(*this);
+  parser.set_debug_level(trace_parsing);
+  result = parser.parse();
+}
+
 void HTTPDriver::error (const yy::location& l, const std::string& m)
 {
   std::cerr << l << ": " << m << std::endl;

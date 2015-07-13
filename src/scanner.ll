@@ -65,17 +65,31 @@ EOL         \n
 
 %%
 
+void HTTPDriver::scan_begin_source (const std::string& source)
+{
+  char *src = strdup(source.c_str());
+
+  yy_flex_debug = trace_scanning;
+  buffer = yy_scan_string(src);
+}
+
+void HTTPDriver::scan_end_source ()
+{
+  yy_delete_buffer(buffer);
+}
+
+
 void HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
-  if (file.empty () || file == "-")
+
+  if (file.empty ())
     yyin = stdin;
   else if (!(yyin = fopen (file.c_str (), "r"))) {
     error("Can't open " + file + ": " + strerror(errno));
     exit(EXIT_FAILURE);
   }
 }
-
 
 void HTTPDriver::scan_end ()
 {
