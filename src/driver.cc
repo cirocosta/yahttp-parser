@@ -6,7 +6,9 @@ HTTPDriver::HTTPDriver ()
 { }
 
 HTTPDriver::~HTTPDriver()
-{ }
+{
+  scan_destroy();
+}
 
 void HTTPDriver::parse (const std::string &f)
 {

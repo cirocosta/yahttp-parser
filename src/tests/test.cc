@@ -15,8 +15,13 @@ void test_2();
 
 int main()
 {
+  driver.trace_parsing = false;
+  driver.trace_scanning = false;
+
   test_1();
   test_2();
+
+  printf("SUCCESS!\n");
 
   exit(EXIT_SUCCESS);
 }
