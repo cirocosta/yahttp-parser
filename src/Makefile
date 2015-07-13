@@ -6,6 +6,7 @@ CXXFLAGS = -Wall -g -std=c++11 -Wno-deprecated-register
 YFLAGS = -y -d
 LFLAGS =
 
+GENERATED = scanner.cc parser.cc parser.hh stack.hh position.hh location.hh
 TESTS_D = ./tests
 
 all: test.out
@@ -32,5 +33,5 @@ parser.cc: parser.yy
 clean:
 	find . -name "*.out" -delete & \
 	find . -name "*.o" -delete & \
-	$(RM) scanner.cc parser.cc parser.hh && touch parser.hh
+	$(RM) $(GENERATED) && touch parser.hh
 
