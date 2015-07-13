@@ -59,7 +59,7 @@ REASON_PHRASE       ({ALPHA})+
 
 {HTTP_VERSION}  {
                   return yy::HTTPParser::make_HTTP_VERSION(
-                      std::string(yytext), loc);
+                      "HTTP/1.1", loc);
                 }
 
 {PATH}          return yy::HTTPParser::make_PATH(std::string(yytext), loc);

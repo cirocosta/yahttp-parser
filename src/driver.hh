@@ -20,13 +20,14 @@ class HTTPDriver
 {
 public:
   HTTPMessage message;
-
-  bool trace_scanning;
-  std::string file;
-  bool trace_parsing;
   int result;
+
+  std::string file;
   YY_BUFFER_STATE buffer;
   char* src;
+
+  bool trace_scanning;
+  bool trace_parsing;
 
 public:
   HTTPDriver();

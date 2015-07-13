@@ -58,7 +58,7 @@ status_line:  HTTP_VERSION SP
               STATUS_CODE SP
               reason_phrase   {
                                 driver.message.start_line.status_code = $3;
-                                driver.message.start_line.version = "1.1";
+                                driver.message.start_line.version = $1;
                               }
            ;
 
@@ -78,7 +78,7 @@ request_line: METHOD SP
               HTTP_VERSION  {
                               driver.message.start_line.method = $1;
                               driver.message.start_line.path = $3;
-                              driver.message.start_line.version = "1.1";
+                              driver.message.start_line.version = $5;
                             }
             ;
 
