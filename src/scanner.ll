@@ -67,10 +67,9 @@ EOL         \n
 
 void HTTPDriver::scan_begin_source (const std::string& source)
 {
-  if (!(src = strdup(source.c_str()))) {
-    error("scan_begin_source: Can't allocate mem for source");
-    exit(EXIT_FAILURE);
-  }
+  src = new char[source.size() + 1];
+  std::copy(source.begin(), source.end(), src);
+  src[source.size()] = '\0';
 
   yy_flex_debug = trace_scanning;
   buffer = yy_scan_string(src);
@@ -79,25 +78,21 @@ void HTTPDriver::scan_begin_source (const std::string& source)
 void HTTPDriver::scan_end_source ()
 {
   yy_delete_buffer(buffer);
-  free(src);
+  delete[] src;
 }
 
 
 void HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
-  yyin = fopen(file.c_str(), "r");
+
+  if (!(yyin = fopen(file.c_str(), "r"))) {
+    error("Can't open " + file + ": " + strerror(errno));
+    exit(EXIT_FAILURE);
+  }
+
   buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
   yy_switch_to_buffer(buffer);
-
-
-
-  /* if (file.empty ()) */
-  /*   yyin = stdin; */
-  /* else if (!(yyin = fopen (file.c_str (), "r"))) { */
-  /*   error("Can't open " + file + ": " + strerror(errno)); */
-  /*   exit(EXIT_FAILURE); */
-  /* } */
 }
 
 void HTTPDriver::scan_destroy ()
