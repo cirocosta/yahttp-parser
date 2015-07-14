@@ -90,9 +90,10 @@ header_field: %empty              {}
             | header header_field {}
             ;
 
-header: FIELD_NAME ":" SP FIELD_VALUE {
-          driver.message.headers[$1] = $4;
-       }
+header: FIELD_NAME ":" SP FIELD_VALUE EOL { driver.message.headers[$1] = $4; }
+      | REASON_PHRASE ":" SP FIELD_VALUE EOL { driver.message.headers[$1] = $4; }
+      | REASON_PHRASE ":" SP FIELD_NAME EOL { driver.message.headers[$1] = $4; }
+      | FIELD_NAME ":" SP FIELD_NAME EOL { driver.message.headers[$1] = $4; }
       ;
 
 %%

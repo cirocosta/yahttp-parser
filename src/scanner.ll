@@ -43,7 +43,7 @@ STATUS_CODE         ({DIGIT}){3}
 REASON_PHRASE       ({ALPHA})+
 
 FIELD_NAME          ({TCHAR})+
-FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT})*
+FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT}|"://"|"."|"/")*
 
 %{
   // Code run each time a pattern is matched.
