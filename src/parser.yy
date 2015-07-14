@@ -33,25 +33,29 @@
 
 %define api.token.prefix {HTTP_}
 
-%token END 0 "End of File (EOF)"
-%token EOL SP
+%token
+  END 0 "End of File (EOF)"
+  COLON ":"
+;
+%token EOL SP OWS
 %token <HTTPMethod> METHOD
-%token <std::string> PATH HTTP_VERSION REASON_PHRASE
+%token <std::string> PATH HTTP_VERSION REASON_PHRASE FIELD_NAME FIELD_VALUE
 %token <int> STATUS_CODE
 
 %type <HTTPStartLine> start_line;
-%type <std::string> reason_phrase;
-
+%type <HTTPHeaders> header_field;
+%type <HTTPHeader> header;
+%type <std::string> reason_phrase ;
 
 %%
 %start http_message;
 
-http_message: start_line EOL {}
-            | %empty
+http_message: start_line EOL header_field {}
+            | %empty         {}
             ;
 
-start_line: status_line   {}
-          | request_line  {}
+start_line: status_line      {}
+          | request_line     {}
           ;
 
 status_line:  HTTP_VERSION SP
@@ -81,6 +85,15 @@ request_line: METHOD SP
                               driver.message.start_line.version = $5;
                             }
             ;
+
+header_field: %empty              {}
+            | header header_field {}
+            ;
+
+header: FIELD_NAME ":" SP FIELD_VALUE {
+          driver.message.headers[$1] = $4;
+       }
+      ;
 
 %%
 

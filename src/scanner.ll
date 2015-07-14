@@ -31,13 +31,19 @@ HTAB                \x09
 OCTET               [\x00-\xFF]
 VCHAR               [\x21-\x7E]
 WSP                 ({SP}|{HTAB})
+OWS                 {WSP}*
+RWS                 {WSP}+
 EOL                 \n
+TCHAR               ("!"|"#"|"$"|"%"|"_"|"+"|"-"|{DIGIT}|{ALPHA})
 
 HTTP_VERSION        "HTTP/1.1"
 METHOD              ("GET"|"HEAD"|"POST"|"PUT"|"DELETE")
-PATH                "/"
+PATH                "/path"
 STATUS_CODE         ({DIGIT}){3}
 REASON_PHRASE       ({ALPHA})+
+
+FIELD_NAME          ({TCHAR})+
+FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT})*
 
 %{
   // Code run each time a pattern is matched.
@@ -50,6 +56,8 @@ REASON_PHRASE       ({ALPHA})+
   // Code run each time yylex is called.
   loc.step();
 %}
+
+":"             return yy::HTTPParser::make_COLON(loc);
 
 {METHOD}        {
                   return yy::HTTPParser::make_METHOD(
@@ -79,15 +87,19 @@ REASON_PHRASE       ({ALPHA})+
                   return yy::HTTPParser::make_EOL(loc);
                 }
 
-{SP}|{HTAB}     {
-                  loc.step();
-                  return yy::HTTPParser::make_SP(loc);
-                }
+{SP}|{HTAB}     loc.step(); return yy::HTTPParser::make_SP(loc);
+
+{OWS}           loc.step(); return yy::HTTPParser::make_OWS(loc);
 
 {REASON_PHRASE} {
                   return yy::HTTPParser::make_REASON_PHRASE(
                     std::string(yytext),loc);
                 }
+
+
+{FIELD_VALUE}   return yy::HTTPParser::make_FIELD_VALUE(std::string(yytext), loc);
+
+{FIELD_NAME}    return yy::HTTPParser::make_FIELD_NAME(std::string(yytext), loc);
 
 .               driver.error(loc, "Invalid Character");
 

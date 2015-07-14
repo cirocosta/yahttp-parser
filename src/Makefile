@@ -15,7 +15,7 @@ scanner.o: scanner.cc
 parser.o: parser.cc
 driver.o: driver.cc
 
-test.out: $(TESTS_D)/test.cc parser.o scanner.o driver.o
+test.out: $(TESTS_D)/test.cc parser.o scanner.o driver.o http_defs.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 %.o: %.cc
