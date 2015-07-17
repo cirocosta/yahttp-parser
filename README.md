@@ -2,23 +2,26 @@
 
 > A naive C++ HTTP parser implementation using Bison and Flex
 
-**ATTENTION**: this is NOT a conformant parser. It DOES NOT aim to comply with all of the requirements associated with the roles it partakes in the HTTP specification.
+**ATTENTION**: this is NOT a full spec conformant parser. It DOES NOT aim to comply with all of the requirements associated with the roles it partakes in the HTTP specification.
 
 
 ## Install
 
-This project is not using CMake at the moment (but it will) so make sure by yourself that you have all the dependencies installed:
+Make sure that you have all the dependencies installed:
 
 - flex
 - bison\*
 - make
-- a modern c++ compiler - targetting c++11 (recommend clang, 3.5)
+- cmake
+- a modern c++ compiler - targetting c++11 (i recommend clang, 3.5 is good)
 
 Then, simply:
 
 ```sh
-$ cd src
-$ make
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make && make test
 ```
 
 \*: If you've built `bison` from source and in the `make` step it claims that there's a problem with `m4`, try setting the `pkgdata_dir`:
