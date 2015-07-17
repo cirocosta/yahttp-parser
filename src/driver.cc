@@ -34,6 +34,7 @@ void HTTPDriver::parse_source (const std::string &source)
   yy::HTTPParser parser(*this);
   parser.set_debug_level(trace_parsing);
   result = parser.parse();
+  scan_end_source();
 }
 
 void HTTPDriver::error (const yy::location& l, const std::string& m)
