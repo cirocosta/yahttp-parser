@@ -3,5 +3,12 @@ target_link_libraries(parser_test gtest gtest_main
   yahttpparser
 )
 
-add_test(NAME parser COMMAND parser)
+add_test(NAME parser_test COMMAND parser_test)
+
+add_custom_command(
+  TARGET parser_test PRE_BUILD
+  COMMAND ${CMAKE_COMMAND}
+  -E copy_directory
+  ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:parser_test>/assets
+)
 

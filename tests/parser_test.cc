@@ -94,7 +94,7 @@ TEST(Parser, RequestWithoutHeaders) {
 TEST(Parser, RequestFromAFile) {
   bool debug = false;
   HTTPDriver driver(debug, debug);
-  driver.parse("./tests/get-req.txt");
+  driver.parse("./assets/get-req.txt");
 
   EXPECT_TRUE(!driver.result);
   EXPECT_TRUE(driver.message.headers.empty());
