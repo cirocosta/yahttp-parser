@@ -31,21 +31,21 @@
 // version 2.2 of Bison.
 
 /**
- ** \file parser.hh
+ ** \file /home/ciro/Development/CPP/yahttp-parser/build/src/parser.hh
  ** Define the yy::parser class.
  */
 
 // C++ LALR(1) parser skeleton written by Akim Demaille.
 
-#ifndef YY_YY_PARSER_HH_INCLUDED
-# define YY_YY_PARSER_HH_INCLUDED
+#ifndef YY_YY_HOME_CIRO_DEVELOPMENT_CPP_YAHTTP_PARSER_BUILD_SRC_PARSER_HH_INCLUDED
+# define YY_YY_HOME_CIRO_DEVELOPMENT_CPP_YAHTTP_PARSER_BUILD_SRC_PARSER_HH_INCLUDED
 // //                    "%code requires" blocks.
 #line 11 "parser.yy" // lalr1.cc:377
 
 #include <string>
-#include "http_defs.hh"
+#include "yahttp/parser/http_defs.hh"
 
-#line 49 "parser.hh" // lalr1.cc:377
+#line 49 "/home/ciro/Development/CPP/yahttp-parser/build/src/parser.hh" // lalr1.cc:377
 
 # include <cassert>
 # include <cstdlib> // std::abort
@@ -122,7 +122,7 @@
 
 
 namespace yy {
-#line 126 "parser.hh" // lalr1.cc:377
+#line 126 "/home/ciro/Development/CPP/yahttp-parser/build/src/parser.hh" // lalr1.cc:377
 
 
 
@@ -1172,9 +1172,9 @@ namespace yy {
 
 
 } // yy
-#line 1176 "parser.hh" // lalr1.cc:377
+#line 1176 "/home/ciro/Development/CPP/yahttp-parser/build/src/parser.hh" // lalr1.cc:377
 
 
 
 
-#endif // !YY_YY_PARSER_HH_INCLUDED
+#endif // !YY_YY_HOME_CIRO_DEVELOPMENT_CPP_YAHTTP_PARSER_BUILD_SRC_PARSER_HH_INCLUDED

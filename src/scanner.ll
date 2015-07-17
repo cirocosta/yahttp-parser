@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <string>
 
-#include "driver.hh"
+#include "yahttp/parser/driver.hh"
 #include "parser.hh"
 
 #undef yywrap

@@ -10,7 +10,7 @@
 %code requires
 {
 #include <string>
-#include "http_defs.hh"
+#include "yahttp/parser/http_defs.hh"
 }
 
 // passing the parsing context
@@ -28,7 +28,7 @@
 
 %code
 {
-#include "driver.hh"
+#include "yahttp/parser/driver.hh"
 }
 
 %define api.token.prefix {HTTP_}

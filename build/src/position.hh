@@ -31,12 +31,12 @@
 // version 2.2 of Bison.
 
 /**
- ** \file position.hh
+ ** \file /home/ciro/Development/CPP/yahttp-parser/build/src/position.hh
  ** Define the yy::position class.
  */
 
-#ifndef YY_YY_POSITION_HH_INCLUDED
-# define YY_YY_POSITION_HH_INCLUDED
+#ifndef YY_YY_HOME_CIRO_DEVELOPMENT_CPP_YAHTTP_PARSER_BUILD_SRC_POSITION_HH_INCLUDED
+# define YY_YY_HOME_CIRO_DEVELOPMENT_CPP_YAHTTP_PARSER_BUILD_SRC_POSITION_HH_INCLUDED
 
 # include <algorithm> // std::max
 # include <iostream>
@@ -52,7 +52,7 @@
 
 
 namespace yy {
-#line 56 "position.hh" // location.cc:296
+#line 56 "/home/ciro/Development/CPP/yahttp-parser/build/src/position.hh" // location.cc:296
   /// Abstract a position.
   class position
   {
@@ -176,5 +176,5 @@ namespace yy {
 
 
 } // yy
-#line 180 "position.hh" // location.cc:296
-#endif // !YY_YY_POSITION_HH_INCLUDED
+#line 180 "/home/ciro/Development/CPP/yahttp-parser/build/src/position.hh" // location.cc:296
+#endif // !YY_YY_HOME_CIRO_DEVELOPMENT_CPP_YAHTTP_PARSER_BUILD_SRC_POSITION_HH_INCLUDED

@@ -1,0 +1,1 @@
+/usr/bin/clang++    -Wno-deprecated-register -std=c++11    CMakeFiles/parser_test.dir/parser_test.cc.o  -o parser_test -rdynamic ../lib/googletest/libgtest.a ../lib/googletest/libgtest_main.a ../src/libyahttpparser.a ../lib/googletest/libgtest.a -lpthread 

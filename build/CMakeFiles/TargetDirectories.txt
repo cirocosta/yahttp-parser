@@ -1,0 +1,4 @@
+/home/ciro/Development/CPP/yahttp-parser/build/lib/googletest/CMakeFiles/gtest.dir
+/home/ciro/Development/CPP/yahttp-parser/build/lib/googletest/CMakeFiles/gtest_main.dir
+/home/ciro/Development/CPP/yahttp-parser/build/tests/CMakeFiles/parser_test.dir
+/home/ciro/Development/CPP/yahttp-parser/build/src/CMakeFiles/yahttpparser.dir
