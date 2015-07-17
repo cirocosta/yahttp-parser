@@ -4,6 +4,7 @@
 
 **ATTENTION**: this is NOT a full spec conformant parser. It DOES NOT aim to comply with all of the requirements associated with the roles it partakes in the HTTP specification.
 
+[![Build Status](https://travis-ci.org/cirocosta/yahttp-parser.svg?branch=master)](https://travis-ci.org/cirocosta/yahttp-parser)
 
 ## Install
 
