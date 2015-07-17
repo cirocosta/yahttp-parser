@@ -1,7 +1,12 @@
 *.o
 *.out
 *.a
+*.pyc
 
-src/scanner.cc
-src/parser.cc
-src/parser.hh
+build/
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+

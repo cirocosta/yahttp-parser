@@ -1,2 +1,0 @@
-/usr/bin/ar cr libyahttpparser.a  CMakeFiles/yahttpparser.dir/scanner.cc.o CMakeFiles/yahttpparser.dir/parser.cc.o CMakeFiles/yahttpparser.dir/driver.cc.o CMakeFiles/yahttpparser.dir/http_defs.cc.o
-/usr/bin/ranlib libyahttpparser.a
