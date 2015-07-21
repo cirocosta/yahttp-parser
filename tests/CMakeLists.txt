@@ -1,5 +1,17 @@
+# HTTP DEFS
+
+add_executable(http_test http_test.cc)
+target_link_libraries(http_test gtest gtest_main
+  http
+)
+add_test(NAME http_test COMMAND http_test)
+
+
+# PARSER
+
 add_executable(parser_test parser_test.cc)
 target_link_libraries(parser_test gtest gtest_main
+  http
   yahttpparser
 )
 
