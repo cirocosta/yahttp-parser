@@ -1,10 +1,5 @@
 #include "yahttp/HTTP.hh"
 
-/**
- * For debugging purposes, properly defines output
- * streams.
- */
-
 
 static const std::string CRLF = "\r\n";
 static const std::string SP = " ";
@@ -52,7 +47,10 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPBody& body)
 
 std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseMessage& message)
 {
-  o << message.start_line << CRLF
+  yahttp::HTTPResponseStartLine* res_sl =
+    static_cast<yahttp::HTTPResponseStartLine*>(message.start_line.get());
+
+  o << *res_sl << CRLF
     << message.headers << CRLF
     << message.body << CRLF;
 
@@ -61,7 +59,10 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseMessage& mes
 
 std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestMessage& message)
 {
-  o << message.start_line << CRLF
+  yahttp::HTTPRequestStartLine* req_sl =
+    static_cast<yahttp::HTTPRequestStartLine*>(message.start_line.get());
+
+  o << *req_sl << CRLF
     << message.headers << CRLF
     << message.body << CRLF;
 

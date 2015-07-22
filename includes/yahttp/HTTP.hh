@@ -78,7 +78,6 @@ struct HTTPResponseStartLine : public HTTPStartLine
 typedef std::map<std::string, std::string> HTTPHeaders;
 typedef std::vector<char> HTTPBody;
 typedef std::shared_ptr<HTTPStartLine> HTTPStartLinePtr;
-/* std::ostream& operator<<(std::ostream& o, const HTTPStartLinePtr&); */
 
 struct HTTPMessage
 {
