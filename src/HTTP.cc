@@ -29,10 +29,17 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseStartLine& r
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const yahttp::HTTPHeaders& headers)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPHeader& header)
+{
+  o << header.first << ": " << header.second;
+
+  return o;
+}
+
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPHeaderMap& headers)
 {
   for (const auto& header : headers)
-    o << header.first << ": " << header.second << CRLF;
+    o << header << CRLF;
 
   return o;
 }

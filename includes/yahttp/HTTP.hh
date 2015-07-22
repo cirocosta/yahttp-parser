@@ -48,6 +48,7 @@ static const std::map<HTTPMethod, std::string> HTTPMethodInverseMapping = {
 
 struct HTTPStartLine {
   std::string version;
+  HTTPMessageType type;
 };
 
 struct HTTPRequestStartLine : public HTTPStartLine
@@ -59,6 +60,7 @@ struct HTTPRequestStartLine : public HTTPStartLine
     : method(mthd), path(pth)
   {
     version = ver;
+    type = HTTPMessageType::Request;
   }
 };
 
@@ -71,10 +73,20 @@ struct HTTPResponseStartLine : public HTTPStartLine
     : status_code(sc), reason_phrase(rp)
   {
     version = ver;
+    type = HTTPMessageType::Response;
   }
 };
 
-typedef std::map<std::string, std::string> HTTPHeaders;
+struct HTTPHeaderMap : std::map<std::string, std::string>
+{
+  using std::map<std::string, std::string>::map;
+};
+
+struct HTTPHeader : std::pair<std::string, std::string>
+{
+  using std::pair<std::string, std::string>::pair;
+};
+
 typedef std::vector<char> HTTPBody;
 typedef std::shared_ptr<HTTPStartLine> HTTPStartLinePtr;
 
@@ -82,14 +94,15 @@ struct HTTPMessage
 {
   HTTPMessageType type;
   HTTPStartLinePtr start_line;
-  HTTPHeaders headers;
+  HTTPHeaderMap headers;
   HTTPBody body;
 };
 
+typedef std::shared_ptr<HTTPMessage> HTTPMessagePtr;
 
 struct HTTPResponseMessage : public HTTPMessage
 {
-  HTTPResponseMessage (HTTPResponseStartLine sl, HTTPHeaders h,
+  HTTPResponseMessage (HTTPResponseStartLine sl, HTTPHeaderMap h,
                        HTTPBody b)
   {
     start_line = HTTPStartLinePtr(new HTTPResponseStartLine(sl));
@@ -101,7 +114,7 @@ struct HTTPResponseMessage : public HTTPMessage
 
 struct HTTPRequestMessage : public HTTPMessage
 {
-  HTTPRequestMessage (HTTPRequestStartLine sl, HTTPHeaders h,
+  HTTPRequestMessage (HTTPRequestStartLine sl, HTTPHeaderMap h,
                        HTTPBody b)
   {
     start_line = HTTPStartLinePtr(new HTTPRequestStartLine(sl));
@@ -121,7 +134,9 @@ std::ostream& operator<<(std::ostream& o,
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPResponseStartLine& res);
 std::ostream& operator<<(std::ostream& o,
-                         const yahttp::HTTPHeaders& headers);
+                         const yahttp::HTTPHeader& header);
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPHeaderMap& headers);
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPBody& body);
 std::ostream& operator<<(std::ostream& o,

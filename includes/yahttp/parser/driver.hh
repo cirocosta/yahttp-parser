@@ -23,7 +23,7 @@ typedef struct yy_buffer_state * YY_BUFFER_STATE;
 class HTTPDriver
 {
 public:
-  std::unique_ptr<HTTPMessage> message;
+  HTTPMessagePtr message;
   int result;
 
   std::string file;

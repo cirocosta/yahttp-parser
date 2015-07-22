@@ -17,7 +17,7 @@ TEST(Http, HighLevelRequest) {
 
   HTTPMessage msg;
   HTTPBody body (bmsg.begin(), bmsg.end());
-  HTTPHeaders headers;
+  HTTPHeaderMap headers;
 
   headers["Content-Length"] = "1024";
 
@@ -50,7 +50,7 @@ TEST(Http, SimpleRequest) {
 
   HTTPRequestMessage req_msg (
     req,
-    HTTPHeaders {{"Content-Length", "1024"}},
+    HTTPHeaderMap {{"Content-Length", "1024"}},
     data
   );
 
@@ -77,7 +77,7 @@ TEST(Http, SimpleResponse) {
 
   HTTPResponseMessage res_msg (
       res,
-      HTTPHeaders {{"Content-Length", "1024"}},
+      HTTPHeaderMap {{"Content-Length", "1024"}},
       data
   );
 

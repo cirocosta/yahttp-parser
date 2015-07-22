@@ -54,48 +54,61 @@
 
 %token <HTTPMethod> METHOD;
 
-
-%type <std::string> http_message;
-%type <std::string> start_line;
-%type <std::string> request_line;
-%type <std::string> status_line;
+%type <HTTPMessagePtr> http_message;
+%type <HTTPStartLinePtr> start_line;
+%type <HTTPStartLinePtr> request_line;
+%type <HTTPStartLinePtr> status_line;
 %type <std::string> reason_phrase;
-%type <std::string> header_field;
-%type <std::string> header;
-
+%type <HTTPHeader> header;
+%type <HTTPHeaderMap> header_field;
 
 %%
 %start http_message;
 
-http_message: start_line EOL header_field { }
-            ;
+http_message
+  : start_line EOL header_field  {
+  HTTPMessagePtr msg (new HTTPMessage);
 
-start_line: status_line      {  }
-          | request_line     {  }
-          ;
+  msg->type = $1->type;
+  msg->start_line = $1;
+  msg->headers = $3;
 
-status_line:  HTTP_VERSION SP
-              STATUS_CODE SP
-              reason_phrase   {
+  driver.message = msg;
+  $$ = driver.message;
+                                  }
+  ;
 
-                              }
-           ;
+start_line
+  : status_line   { $$ = $1; }
+  | request_line  { $$ = $1; }
+  ;
 
-reason_phrase:  %empty          {  }
-             |  REASON_PHRASE   { }
-             |  reason_phrase SP REASON_PHRASE { }
-             ;
+status_line
+  : HTTP_VERSION SP STATUS_CODE SP reason_phrase  {
+  HTTPStartLinePtr sl (new HTTPResponseStartLine ($1, $3, $5));
+  $$ = sl;
+                                                  }
+  ;
 
-request_line: METHOD SP
-              PATH SP
-              HTTP_VERSION  { }
-            ;
+reason_phrase
+  : %empty                          { $$ = "";  }
+  | REASON_PHRASE                   { $$ = $1;  }
+  | reason_phrase SP REASON_PHRASE  { $$ = $1 + $3;  }
+  ;
 
-header_field: %empty              { }
-            | header header_field { }
-            ;
+request_line
+  : METHOD SP PATH SP HTTP_VERSION  {
+  HTTPStartLinePtr sl (new HTTPRequestStartLine ($5, $1, $3));
+  $$ = sl;
+                                    }
+  ;
 
-header: FIELD_NAME ":" SP FIELD_VALUE EOL { }
+header_field
+  : %empty              { $$ = HTTPHeaderMap {}; }
+  | header_field header { $1.emplace($2); $$ = $1; }
+  ;
+
+header: FIELD_NAME ":" SP FIELD_VALUE EOL { $$ = HTTPHeader {$1, $4}; }
       ;
 
 %%
