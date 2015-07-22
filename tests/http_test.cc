@@ -5,6 +5,35 @@
 
 using namespace yahttp;
 
+TEST(Http, HighLevelRequest) {
+  std::ostringstream actual;
+  const char* expected =
+    "POST /path HTTP/1.1\r\n"
+    "Content-Length: 1024\r\n"
+    "\r\n"
+    "hue hue brbr\r\n";
+
+  std::string bmsg = "hue hue brbr";
+
+  HTTPMessage msg;
+  HTTPBody body (bmsg.begin(), bmsg.end());
+  HTTPHeaders headers;
+
+  headers["Content-Length"] = "1024";
+
+  HTTPStartLinePtr sl (
+    new HTTPRequestStartLine( "HTTP/1.1", HTTPMethod::POST, "/path")
+  );
+
+  msg.start_line = sl;
+  msg.headers = headers;
+  msg.body = body;
+  msg.type = HTTPMessageType::Request;
+
+  actual << msg;
+  EXPECT_EQ(expected, actual.str());
+}
+
 TEST(Http, SimpleRequest) {
   std::ostringstream actual;
   const char* expected =

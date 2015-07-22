@@ -69,4 +69,16 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestMessage& mess
   return o;
 }
 
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPMessage& message)
+{
+  if (message.type == yahttp::HTTPMessageType::Request) {
+    o << *static_cast<const yahttp::HTTPRequestMessage*>(&message);
+  } else if (message.type == yahttp::HTTPMessageType::Response) {
+    o << *static_cast<const yahttp::HTTPResponseMessage*>(&message);
+  } else {
+    throw std::runtime_error("Unrecognized http message type.");
+  }
+
+  return o;
+}
 

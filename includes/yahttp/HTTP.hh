@@ -46,13 +46,8 @@ static const std::map<HTTPMethod, std::string> HTTPMethodInverseMapping = {
   {HTTPMethod::OPTIONS, "OPTIONS"},
 };
 
-class HTTPStartLine {
-public:
+struct HTTPStartLine {
   std::string version;
-protected:
-  HTTPStartLine (std::string ver)
-    : version(ver)
-  {}
 };
 
 struct HTTPRequestStartLine : public HTTPStartLine
@@ -60,9 +55,11 @@ struct HTTPRequestStartLine : public HTTPStartLine
   HTTPMethod method;
   std::string path;
 
-  HTTPRequestStartLine (std::string vsion, HTTPMethod mthd, std::string pth)
-    : HTTPStartLine (vsion), method(mthd), path(pth)
-  {}
+  HTTPRequestStartLine (std::string ver, HTTPMethod mthd, std::string pth)
+    : method(mthd), path(pth)
+  {
+    version = ver;
+  }
 };
 
 struct HTTPResponseStartLine : public HTTPStartLine
@@ -71,8 +68,10 @@ struct HTTPResponseStartLine : public HTTPStartLine
   std::string reason_phrase;
 
   HTTPResponseStartLine (std::string ver, unsigned sc, std::string rp)
-    : HTTPStartLine (ver), status_code(sc), reason_phrase(rp)
-  {}
+    : status_code(sc), reason_phrase(rp)
+  {
+    version = ver;
+  }
 };
 
 typedef std::map<std::string, std::string> HTTPHeaders;
@@ -86,6 +85,7 @@ struct HTTPMessage
   HTTPHeaders headers;
   HTTPBody body;
 };
+
 
 struct HTTPResponseMessage : public HTTPMessage
 {
@@ -124,6 +124,8 @@ std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPHeaders& headers);
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPBody& body);
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPMessage& message);
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPResponseMessage& message);
 std::ostream& operator<<(std::ostream& o,
