@@ -4,9 +4,11 @@
 #include <string>
 #include <iostream>
 #include <utility>
+#include <memory>
 #include <map>
 #include <vector>
 #include <iterator>
+
 
 namespace yahttp {
 
@@ -44,58 +46,74 @@ static const std::map<HTTPMethod, std::string> HTTPMethodInverseMapping = {
   {HTTPMethod::OPTIONS, "OPTIONS"},
 };
 
-struct HTTPRequestStartLine
-{
-  const HTTPMethod method;
-  const std::string path;
-  const std::string version;
+class HTTPStartLine {
+public:
+  std::string version;
+protected:
+  HTTPStartLine (std::string ver)
+    : version(ver)
+  {}
 };
 
-struct HTTPResponseStartLine
+struct HTTPRequestStartLine : public HTTPStartLine
 {
-  const std::string version;
-  const unsigned status_code;
-  const std::string reason_phrase;
+  HTTPMethod method;
+  std::string path;
+
+  HTTPRequestStartLine (std::string vsion, HTTPMethod mthd, std::string pth)
+    : HTTPStartLine (vsion), method(mthd), path(pth)
+  {}
+};
+
+struct HTTPResponseStartLine : public HTTPStartLine
+{
+  unsigned status_code;
+  std::string reason_phrase;
+
+  HTTPResponseStartLine (std::string ver, unsigned sc, std::string rp)
+    : HTTPStartLine (ver), status_code(sc), reason_phrase(rp)
+  {}
 };
 
 typedef std::map<std::string, std::string> HTTPHeaders;
 typedef std::vector<char> HTTPBody;
+typedef std::shared_ptr<HTTPStartLine> HTTPStartLinePtr;
+/* std::ostream& operator<<(std::ostream& o, const HTTPStartLinePtr&); */
 
-
-class HTTPMessage
+struct HTTPMessage
 {
-public:
-  const HTTPHeaders headers;
-  const HTTPBody body;
-protected:
-  HTTPMessage(HTTPHeaders h, HTTPBody b)
-    : headers(h), body(b)
-  {}
+  HTTPMessageType type;
+  HTTPStartLinePtr start_line;
+  HTTPHeaders headers;
+  HTTPBody body;
 };
 
 struct HTTPResponseMessage : public HTTPMessage
 {
-  const HTTPResponseStartLine start_line;
-
   HTTPResponseMessage (HTTPResponseStartLine sl, HTTPHeaders h,
                        HTTPBody b)
-    : HTTPMessage(h, b), start_line(sl)
-  {}
+  {
+    start_line = HTTPStartLinePtr(new HTTPResponseStartLine(sl));
+    headers = h;
+    body = b;
+    type = HTTPMessageType::Response;
+  }
 };
 
 struct HTTPRequestMessage : public HTTPMessage
 {
-  const HTTPRequestStartLine start_line;
-
   HTTPRequestMessage (HTTPRequestStartLine sl, HTTPHeaders h,
                        HTTPBody b)
-    : HTTPMessage(h, b), start_line(sl)
-  {}
+  {
+    start_line = HTTPStartLinePtr(new HTTPRequestStartLine(sl));
+    headers = h;
+    body = b;
+    type = HTTPMessageType::Request;
+  }
 };
 
 }; // !ns http
 
-using namespace yahttp;
 
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPMethod& method);

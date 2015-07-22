@@ -3,13 +3,17 @@
 
 #include <string>
 #include <map>
+#include <memory>
+
 #include "parser.hh"
-#include "http_defs.hh"
+#include "yahttp/HTTP.hh"
 
 #define YY_DECL \
-  yy::HTTPParser::symbol_type yylex (HTTPDriver& driver)
+  yahttp::HTTPParser::symbol_type yylex (yahttp::HTTPDriver& driver)
 
 YY_DECL;
+
+namespace yahttp {
 
 typedef struct yy_buffer_state * YY_BUFFER_STATE;
 
@@ -19,7 +23,7 @@ typedef struct yy_buffer_state * YY_BUFFER_STATE;
 class HTTPDriver
 {
 public:
-  HTTPMessage message;
+  std::unique_ptr<HTTPMessage> message;
   int result;
 
   std::string file;
@@ -44,8 +48,11 @@ public:
   void scan_end_source();
   void scan_destroy();
 
-  void error(const yy::location& l, const std::string& m);
+  void error(const yahttp::location& l, const std::string& m);
   void error(const std::string& m);
 };
 
+}; // ! ns yahttp
+
 #endif
+

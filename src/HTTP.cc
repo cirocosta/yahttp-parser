@@ -5,19 +5,18 @@
  * streams.
  */
 
-using namespace yahttp;
 
 static const std::string CRLF = "\r\n";
 static const std::string SP = " ";
 
-std::ostream& operator<<(std::ostream& o, const HTTPMethod& method)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPMethod& method)
 {
-  o << HTTPMethodInverseMapping.at(method);
+  o << yahttp::HTTPMethodInverseMapping.at(method);
 
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const HTTPRequestStartLine& req)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestStartLine& req)
 {
   o << req.method << SP
     << req.path << SP
@@ -26,7 +25,7 @@ std::ostream& operator<<(std::ostream& o, const HTTPRequestStartLine& req)
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const HTTPResponseStartLine& res)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseStartLine& res)
 {
   o << res.version << SP
     << res.status_code << SP
@@ -35,7 +34,7 @@ std::ostream& operator<<(std::ostream& o, const HTTPResponseStartLine& res)
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const HTTPHeaders& headers)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPHeaders& headers)
 {
   for (const auto& header : headers)
     o << header.first << ": " << header.second << CRLF;
@@ -43,7 +42,7 @@ std::ostream& operator<<(std::ostream& o, const HTTPHeaders& headers)
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const HTTPBody& body)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPBody& body)
 {
   std::copy(body.begin(), body.end(),
             std::ostream_iterator<char>(o, ""));
@@ -51,7 +50,7 @@ std::ostream& operator<<(std::ostream& o, const HTTPBody& body)
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const HTTPResponseMessage& message)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseMessage& message)
 {
   o << message.start_line << CRLF
     << message.headers << CRLF
@@ -60,7 +59,7 @@ std::ostream& operator<<(std::ostream& o, const HTTPResponseMessage& message)
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const HTTPRequestMessage& message)
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestMessage& message)
 {
   o << message.start_line << CRLF
     << message.headers << CRLF
@@ -68,4 +67,5 @@ std::ostream& operator<<(std::ostream& o, const HTTPRequestMessage& message)
 
   return o;
 }
+
 

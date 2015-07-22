@@ -2,6 +2,7 @@
 %require "3.0.4"
 
 %defines
+%define api.namespace {yahttp}
 %define parser_class_name {HTTPParser}
 %define api.token.constructor
 %define api.value.type variant
@@ -9,8 +10,7 @@
 
 %code requires
 {
-#include <string>
-#include "yahttp/parser/http_defs.hh"
+#include "yahttp/HTTP.hh"
 }
 
 // passing the parsing context
@@ -29,76 +29,78 @@
 %code
 {
 #include "yahttp/parser/driver.hh"
+#include <string>
 }
 
 %define api.token.prefix {HTTP_}
 
 %token
   END 0 "End of File (EOF)"
-  COLON ":"
+  COLON
+  EOL
+  SP
+  OWS
 ;
-%token EOL SP OWS
-%token <HTTPMethod> METHOD
-%token <std::string> PATH HTTP_VERSION REASON_PHRASE FIELD_NAME FIELD_VALUE
+
 %token <int> STATUS_CODE
 
-%type <HTTPStartLine> start_line;
-%type <HTTPHeaders> header_field;
-%type <HTTPHeader> header;
-%type <std::string> reason_phrase ;
+%token <std::string>
+  PATH
+  HTTP_VERSION
+  REASON_PHRASE
+  FIELD_NAME
+  FIELD_VALUE
+;
+
+%token <HTTPMethod> METHOD;
+
+
+%type <std::string> http_message;
+%type <std::string> start_line;
+%type <std::string> request_line;
+%type <std::string> status_line;
+%type <std::string> reason_phrase;
+%type <std::string> header_field;
+%type <std::string> header;
+
 
 %%
 %start http_message;
 
-http_message: start_line EOL header_field {}
-            | %empty         {}
+http_message: start_line EOL header_field { }
             ;
 
-start_line: status_line      {}
-          | request_line     {}
+start_line: status_line      {  }
+          | request_line     {  }
           ;
 
 status_line:  HTTP_VERSION SP
               STATUS_CODE SP
               reason_phrase   {
-                                driver.message.start_line.status_code = $3;
-                                driver.message.start_line.version = $1;
+
                               }
            ;
 
-reason_phrase:  %empty          { $$ = ""; }
-             |  REASON_PHRASE   {
-                  $$ = $1;
-                  driver.message.start_line.reason_phrase += $1;
-                }
-             |  reason_phrase SP REASON_PHRASE {
-                  $$ = " " + $3;
-                  driver.message.start_line.reason_phrase += $$;
-                }
+reason_phrase:  %empty          {  }
+             |  REASON_PHRASE   { }
+             |  reason_phrase SP REASON_PHRASE { }
              ;
 
 request_line: METHOD SP
               PATH SP
-              HTTP_VERSION  {
-                              driver.message.start_line.method = $1;
-                              driver.message.start_line.path = $3;
-                              driver.message.start_line.version = $5;
-                            }
+              HTTP_VERSION  { }
             ;
 
-header_field: %empty              {}
-            | header header_field {}
+header_field: %empty              { }
+            | header header_field { }
             ;
 
-header: FIELD_NAME ":" SP FIELD_VALUE EOL { driver.message.headers[$1] = $4; }
-      | REASON_PHRASE ":" SP FIELD_VALUE EOL { driver.message.headers[$1] = $4; }
-      | REASON_PHRASE ":" SP FIELD_NAME EOL { driver.message.headers[$1] = $4; }
-      | FIELD_NAME ":" SP FIELD_NAME EOL { driver.message.headers[$1] = $4; }
+header: FIELD_NAME ":" SP FIELD_VALUE EOL { }
       ;
 
 %%
 
-void yy::HTTPParser::error (const location_type& l, const std::string& m)
+void yahttp::HTTPParser::error (const location_type& l, const std::string& m)
 {
   driver.error(l, m);
 }

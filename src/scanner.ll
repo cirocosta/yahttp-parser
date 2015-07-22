@@ -12,7 +12,7 @@
 #define yywrap() 1
 
 // The location of the current token.
-static yy::location loc;
+static yahttp::location loc;
 
 %}
 
@@ -57,20 +57,20 @@ FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT}|"://"|"."|"/")*
   loc.step();
 %}
 
-":"             return yy::HTTPParser::make_COLON(loc);
+":"             return yahttp::HTTPParser::make_COLON(loc);
 
 {METHOD}        {
-                  return yy::HTTPParser::make_METHOD(
-                      HTTPMethodMapping.at(yytext), loc
+                  return yahttp::HTTPParser::make_METHOD(
+                      yahttp::HTTPMethodMapping.at(yytext), loc
                   );
                 }
 
 {HTTP_VERSION}  {
-                  return yy::HTTPParser::make_HTTP_VERSION(
+                  return yahttp::HTTPParser::make_HTTP_VERSION(
                       "HTTP/1.1", loc);
                 }
 
-{PATH}          return yy::HTTPParser::make_PATH(std::string(yytext), loc);
+{PATH}          return yahttp::HTTPParser::make_PATH(std::string(yytext), loc);
 
 {STATUS_CODE}   {
                   errno = 0;
@@ -79,35 +79,35 @@ FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT}|"://"|"."|"/")*
                   if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
                     driver.error (loc, "integer is out of range");
 
-                  return yy::HTTPParser::make_STATUS_CODE(n, loc);
+                  return yahttp::HTTPParser::make_STATUS_CODE(n, loc);
                 }
 
 {EOL}           {
                   loc.lines(yyleng); loc.step();
-                  return yy::HTTPParser::make_EOL(loc);
+                  return yahttp::HTTPParser::make_EOL(loc);
                 }
 
-{SP}|{HTAB}     loc.step(); return yy::HTTPParser::make_SP(loc);
+{SP}|{HTAB}     loc.step(); return yahttp::HTTPParser::make_SP(loc);
 
-{OWS}           loc.step(); return yy::HTTPParser::make_OWS(loc);
+{OWS}           loc.step(); return yahttp::HTTPParser::make_OWS(loc);
 
 {REASON_PHRASE} {
-                  return yy::HTTPParser::make_REASON_PHRASE(
+                  return yahttp::HTTPParser::make_REASON_PHRASE(
                     std::string(yytext),loc);
                 }
 
 
-{FIELD_VALUE}   return yy::HTTPParser::make_FIELD_VALUE(std::string(yytext), loc);
+{FIELD_VALUE}   return yahttp::HTTPParser::make_FIELD_VALUE(std::string(yytext), loc);
 
-{FIELD_NAME}    return yy::HTTPParser::make_FIELD_NAME(std::string(yytext), loc);
+{FIELD_NAME}    return yahttp::HTTPParser::make_FIELD_NAME(std::string(yytext), loc);
 
 .               driver.error(loc, "Invalid Character");
 
-<<EOF>>         return yy::HTTPParser::make_END(loc);
+<<EOF>>         return yahttp::HTTPParser::make_END(loc);
 
 %%
 
-void HTTPDriver::scan_begin_source (const std::string& source)
+void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
 {
   src = new char[source.size() + 1];
   std::copy(source.begin(), source.end(), src);
@@ -117,14 +117,14 @@ void HTTPDriver::scan_begin_source (const std::string& source)
   buffer = yy_scan_string(src);
 }
 
-void HTTPDriver::scan_end_source ()
+void yahttp::HTTPDriver::scan_end_source ()
 {
   yy_delete_buffer(buffer);
   delete[] src;
 }
 
 
-void HTTPDriver::scan_begin ()
+void yahttp::HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
 
@@ -137,12 +137,12 @@ void HTTPDriver::scan_begin ()
   yy_switch_to_buffer(buffer);
 }
 
-void HTTPDriver::scan_destroy ()
+void yahttp::HTTPDriver::scan_destroy ()
 {
   yylex_destroy();
 }
 
-void HTTPDriver::scan_end ()
+void yahttp::HTTPDriver::scan_end ()
 {
   yy_flush_buffer(buffer);
   yy_delete_buffer(buffer);

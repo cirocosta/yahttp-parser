@@ -3,6 +3,8 @@
 #include <sstream>
 #include <iostream>
 
+using namespace yahttp;
+
 TEST(Http, SimpleRequest) {
   std::ostringstream actual;
   const char* expected =
@@ -11,20 +13,16 @@ TEST(Http, SimpleRequest) {
     "\r\n"
     "hue hue brbr\r\n";
 
-  HTTPRequestStartLine req {
-    HTTPMethod::POST,
-    "/path",
-    "HTTP/1.1"
-  };
+  HTTPRequestStartLine req ("HTTP/1.1", HTTPMethod::POST, "/path");
 
 
   std::string body = "hue hue brbr";
   HTTPBody data (body.begin(), body.end());
 
   HTTPRequestMessage req_msg (
-      req,
-      HTTPHeaders {{"Content-Length", "1024"}},
-      data
+    req,
+    HTTPHeaders {{"Content-Length", "1024"}},
+    data
   );
 
   actual << req_msg;
