@@ -1,4 +1,4 @@
-# yahttparser
+# yahttp-parser
 
 > A naive C++ HTTP parser implementation using Bison and Flex
 
