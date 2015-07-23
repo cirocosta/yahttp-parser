@@ -32,6 +32,7 @@ void HTTPDriver::parse_source (const std::string &source)
   HTTPParser parser(*this);
   parser.set_debug_level(trace_parsing);
   result = parser.parse();
+  scan_end_source();
 }
 
 void HTTPDriver::error (const location& l, const std::string& m)
