@@ -14,10 +14,6 @@ addons:
       - m4
       - valgrind
 
-env:
-  - TEST_SUITE=unit
-  - TEST_SUITE=valgrind
-
 install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
   - wget http://ftp.gnu.org/gnu/bison/bison-3.0.4.tar.gz
@@ -32,10 +28,10 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - cmake -DBISON_EXECUTABLE=${BISON_EXEC} ..
+  - cmake -Dtest=ON -DBISON_EXECUTABLE=${BISON_EXEC} ..
 
 script:
-  - make && make test && valgrind --leak-check=yes --error-exitcode=1 ./tests/parser_test && valgrind --leak-check=yes --error-exitcode=1 ./tests/http_test
+  - make && valgrind --leak-check=yes --error-exitcode=1 ./tests/parser_test && valgrind --leak-check=yes --error-exitcode=1 ./tests/http_test
 
 notifications:
   email: false
