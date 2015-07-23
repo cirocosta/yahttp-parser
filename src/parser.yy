@@ -2,6 +2,7 @@
 %require "3.0.4"
 
 %defines
+%define api.namespace {yahttp}
 %define parser_class_name {HTTPParser}
 %define api.token.constructor
 %define api.value.type variant
@@ -9,8 +10,7 @@
 
 %code requires
 {
-#include <string>
-#include "yahttp/parser/http_defs.hh"
+#include "yahttp/HTTP.hh"
 }
 
 // passing the parsing context
@@ -29,76 +29,99 @@
 %code
 {
 #include "yahttp/parser/driver.hh"
+#include <string>
 }
 
 %define api.token.prefix {HTTP_}
 
 %token
-  END 0 "End of File (EOF)"
-  COLON ":"
+  END   0   "End of File (EOF)"
+  EOL
+  RSP
 ;
-%token EOL SP OWS
-%token <HTTPMethod> METHOD
-%token <std::string> PATH HTTP_VERSION REASON_PHRASE FIELD_NAME FIELD_VALUE
+
 %token <int> STATUS_CODE
 
-%type <HTTPStartLine> start_line;
-%type <HTTPHeaders> header_field;
+%token <std::string>
+  PATH
+  HTTP_VERSION
+  REASON_PHRASE
+  FIELD_NAME
+  FIELD_VALUE
+;
+
+%token <HTTPMethod> METHOD;
+%token <HTTPBody> BODY_CONTENT;
+
+%type <HTTPMessagePtr> http_message http_top;
+%type <HTTPStartLinePtr> start_line;
+%type <HTTPStartLinePtr> request_line;
+%type <HTTPStartLinePtr> status_line;
 %type <HTTPHeader> header;
-%type <std::string> reason_phrase ;
+%type <HTTPHeaderMap> header_field;
+%type <HTTPBody> body;
+
+%printer { yyoutput << $$; } <*>;
 
 %%
+
 %start http_message;
 
-http_message: start_line EOL header_field {}
-            | %empty         {}
-            ;
+http_message
+  : http_top body {
+  $1->body = $2;
+  driver.message = $1;
+  $$ = $1;
+                  }
+  ;
 
-start_line: status_line      {}
-          | request_line     {}
-          ;
+http_top
+  : start_line EOL header_field EOL {
+  HTTPMessagePtr msg (new HTTPMessage);
 
-status_line:  HTTP_VERSION SP
-              STATUS_CODE SP
-              reason_phrase   {
-                                driver.message.start_line.status_code = $3;
-                                driver.message.start_line.version = $1;
-                              }
-           ;
+  msg->type = $1->type;
+  msg->start_line = $1;
+  msg->headers = $3;
+  $$ = msg;
+  driver._BEGIN_BODY();
+                                    }
+  ;
 
-reason_phrase:  %empty          { $$ = ""; }
-             |  REASON_PHRASE   {
-                  $$ = $1;
-                  driver.message.start_line.reason_phrase += $1;
-                }
-             |  reason_phrase SP REASON_PHRASE {
-                  $$ = " " + $3;
-                  driver.message.start_line.reason_phrase += $$;
-                }
-             ;
+body
+  : %empty        { $$ = HTTPBody {}; }
+  | BODY_CONTENT  { $$ = $1; }
+  ;
 
-request_line: METHOD SP
-              PATH SP
-              HTTP_VERSION  {
-                              driver.message.start_line.method = $1;
-                              driver.message.start_line.path = $3;
-                              driver.message.start_line.version = $5;
-                            }
-            ;
+start_line
+  : status_line   { $$ = $1; driver._BEGIN_HEADER(); }
+  | request_line  { $$ = $1; driver._BEGIN_HEADER(); }
+  ;
 
-header_field: %empty              {}
-            | header header_field {}
-            ;
+status_line
+  : HTTP_VERSION RSP STATUS_CODE RSP REASON_PHRASE  {
+  HTTPStartLinePtr sl (new HTTPResponseStartLine ($1, $3, $5));
+  $$ = sl;
+                                                  }
+  ;
 
-header: FIELD_NAME ":" SP FIELD_VALUE EOL { driver.message.headers[$1] = $4; }
-      | REASON_PHRASE ":" SP FIELD_VALUE EOL { driver.message.headers[$1] = $4; }
-      | REASON_PHRASE ":" SP FIELD_NAME EOL { driver.message.headers[$1] = $4; }
-      | FIELD_NAME ":" SP FIELD_NAME EOL { driver.message.headers[$1] = $4; }
+request_line
+  : METHOD RSP PATH RSP HTTP_VERSION  {
+  HTTPStartLinePtr sl (new HTTPRequestStartLine ($5, $1, $3));
+  $$ = sl;
+                                    }
+  ;
+
+header_field
+  : %empty              { $$ = HTTPHeaderMap {};   }
+  | header_field header { $1.emplace($2); $$ = $1; }
+  ;
+
+header: FIELD_NAME FIELD_VALUE EOL { $$ = HTTPHeader {$1, $2}; }
       ;
 
 %%
 
-void yy::HTTPParser::error (const location_type& l, const std::string& m)
+void yahttp::HTTPParser::error (const location_type& l, const std::string& m)
 {
   driver.error(l, m);
 }

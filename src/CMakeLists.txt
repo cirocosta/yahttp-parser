@@ -4,10 +4,14 @@ ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+add_library(http HTTP.cc)
+
 add_library(yahttpparser
   ${FLEX_MyScanner_OUTPUTS}
   ${BISON_MyParser_OUTPUTS}
+  HTTP.cc
   driver.cc
-  http_defs.cc
 )
+
+target_link_libraries(yahttpparser)
 

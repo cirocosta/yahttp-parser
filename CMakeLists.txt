@@ -4,9 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 option(test "Include Tests." ON)
 
 set(PROJECT_NAME yahttp-parser)
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-
 project(${PROJECT_NAME} C CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-register")
 

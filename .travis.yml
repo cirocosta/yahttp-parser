@@ -1,13 +1,16 @@
-sudo: required
-
+sudo: false
 language: cpp
-
 compiler:
   - gcc
-
+  - clang
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
+      - gcc-4.8
+      - g++-4.8
+      - clang
       - m4
       - valgrind
 
@@ -16,20 +19,23 @@ env:
   - TEST_SUITE=valgrind
 
 install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
   - wget http://ftp.gnu.org/gnu/bison/bison-3.0.4.tar.gz
   - tar -xvzf bison-3.0.4.tar.gz
   - cd bison-3.0.4
-  - ./configure --prefix=/usr/local/bison
-  - sudo make install
+  - ./configure
+  - make
+  - export BISON_EXEC=$(pwd)/src/bison
+  - export BISON_PKGDATADIR=$(pwd)/data
   - cd ..
 
 before_script:
   - mkdir build
   - cd build
-  - cmake -DBISON_EXECUTABLE=/usr/local/bison/bin/bison ..
+  - cmake -DBISON_EXECUTABLE=${BISON_EXEC} ..
 
 script:
-  - if [[ $TEST_SUITE == "unit" ]]; then make && make test; else make && cd tests && valgrind --leak-check=yes --error-exitcode=1 ./parser_test; fi
+  - make && make test && valgrind --leak-check=yes --error-exitcode=1 ./tests/parser_test && valgrind --leak-check=yes --error-exitcode=1 ./tests/http_test
 
 notifications:
   email: false
