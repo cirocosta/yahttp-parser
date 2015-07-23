@@ -51,14 +51,16 @@
 ;
 
 %token <HTTPMethod> METHOD;
+%token <HTTPBody> BODY_CONTENT;
 
-%type <HTTPMessagePtr> http_message;
+%type <HTTPMessagePtr> http_message http_top;
 %type <HTTPStartLinePtr> start_line;
 %type <HTTPStartLinePtr> request_line;
 %type <HTTPStartLinePtr> status_line;
 %type <std::string> reason_phrase;
 %type <HTTPHeader> header;
 %type <HTTPHeaderMap> header_field;
+%type <HTTPBody> body;
 
 %printer { yyoutput << $$; } <*>;
 
@@ -67,16 +69,28 @@
 %start http_message;
 
 http_message
-  : start_line EOL header_field  {
+  : http_top body {
+  $1->body = $2;
+  driver.message = $1;
+  $$ = $1;
+                  }
+  ;
+
+http_top
+  : start_line EOL header_field EOL {
   HTTPMessagePtr msg (new HTTPMessage);
 
   msg->type = $1->type;
   msg->start_line = $1;
   msg->headers = $3;
+  $$ = msg;
+  driver._BEGIN_BODY();
+                                    }
+  ;
 
-  driver.message = msg;
-  $$ = driver.message;
-                                  }
+body
+  : %empty        { $$ = HTTPBody {}; }
+  | BODY_CONTENT  { $$ = $1; }
   ;
 
 start_line

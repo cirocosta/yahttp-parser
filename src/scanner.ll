@@ -43,6 +43,8 @@ PATH                "/"({SEGMENT}{SEGMENT}*)?
 FIELD_NAME          [a-zA-Z_\-0-9]+":"
 FIELD_VALUE         {RSP}{VCHAR}+({RSP}{VCHAR})*
 
+BODY_CONTENT        {OCTET}+
+
 REASON_PHRASE       {ALPHA}({RSP}{PCHAR})*
 
 %{
@@ -88,9 +90,19 @@ REASON_PHRASE       {ALPHA}({RSP}{PCHAR})*
 
 <HEADER>{FIELD_VALUE}   return yahttp::HTTPParser::make_FIELD_VALUE(yytext+1, loc);
 
-<HEADER>{FIELD_NAME}    return yahttp::HTTPParser::make_FIELD_NAME(std::string(yytext, 0, yyleng-1), loc);
+<HEADER>{FIELD_NAME}    {
+                          return yahttp::HTTPParser::make_FIELD_NAME(
+                              std::string(yytext, 0, yyleng-1), loc
+                          );
+                        }
 
 <HEADER>{EOL}           return yahttp::HTTPParser::make_EOL(loc);
+
+<BODY>{BODY_CONTENT}  {
+                        return yahttp::HTTPParser::make_BODY_CONTENT(
+                            yahttp::HTTPBody(yytext, yytext+yyleng), loc
+                        );
+                      }
 
 .               driver.error(loc, "Invalid Character");
 
