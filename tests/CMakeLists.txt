@@ -11,7 +11,6 @@ add_test(NAME http_test COMMAND http_test)
 
 add_executable(parser_test parser_test.cc)
 target_link_libraries(parser_test gtest gtest_main
-  http
   yahttpparser
 )
 

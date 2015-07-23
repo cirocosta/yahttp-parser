@@ -124,9 +124,6 @@ struct HTTPRequestMessage : public HTTPMessage
   }
 };
 
-}; // !ns http
-
-
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPMethod& method);
 std::ostream& operator<<(std::ostream& o,
@@ -145,6 +142,13 @@ std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPResponseMessage& message);
 std::ostream& operator<<(std::ostream& o,
                          const yahttp::HTTPRequestMessage& message);
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPStartLinePtr& sl);
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPMessagePtr& msg);
+
+}; // !ns http
+
 
 #endif // ! YAHTTP__HTTP_HH
 

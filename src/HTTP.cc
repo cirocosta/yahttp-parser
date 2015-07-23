@@ -1,5 +1,6 @@
 #include "yahttp/HTTP.hh"
 
+namespace yahttp {
 
 static const std::string CRLF = "\r\n";
 static const std::string SP = " ";
@@ -89,3 +90,30 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPMessage& message)
   return o;
 }
 
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPStartLinePtr& sl)
+{
+  if (sl->type == HTTPMessageType::Request) {
+    o << *static_cast<const yahttp::HTTPRequestStartLine*>(sl.get());
+  } else if (sl->type == HTTPMessageType::Response) {
+    o << *static_cast<const yahttp::HTTPResponseStartLine*>(sl.get());
+  } else {
+    throw std::runtime_error("Unrecognized http message type.");
+  }
+
+  return o;
+}
+
+std::ostream& operator<<(std::ostream& o, const yahttp::HTTPMessagePtr& msg)
+{
+  if (msg->type == HTTPMessageType::Request) {
+    o << *static_cast<const yahttp::HTTPRequestMessage*>(msg.get());
+  } else if (msg->type == HTTPMessageType::Response) {
+    o << *static_cast<const yahttp::HTTPResponseMessage*>(msg.get());
+  } else {
+    throw std::runtime_error("Unrecognized http message type.");
+  }
+
+  return o;
+}
+
+};

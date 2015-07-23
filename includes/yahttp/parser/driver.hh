@@ -50,6 +50,9 @@ public:
 
   void error(const yahttp::location& l, const std::string& m);
   void error(const std::string& m);
+
+  void _BEGIN_HEADER ();
+  void _BEGIN_BODY ();
 };
 
 }; // ! ns yahttp

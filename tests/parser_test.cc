@@ -26,11 +26,11 @@ TEST(Parser, RequestWithHeadersWithURLs) {
     static_cast<HTTPRequestStartLine*>(driver.message->start_line.get());
 
   EXPECT_TRUE(sl->method == HTTPMethod::GET);
-  EXPECT_TRUE(sl->path == "/path");
+  EXPECT_EQ(sl->path, "/path");
 
-  EXPECT_TRUE(driver.message->headers["Content-Length"] == "1024");
-  EXPECT_TRUE(driver.message->headers["Location"] == "https://facebook.com/");
-  EXPECT_TRUE(driver.message->headers["Pragma"] == "no-cache");
+  EXPECT_EQ(driver.message->headers["Content-Length"], "1024");
+  EXPECT_EQ(driver.message->headers["Location"], "https://facebook.com/");
+  EXPECT_EQ(driver.message->headers["Pragma"], "no-cache");
 }
 
 /* TEST(Parser, RequestWithSimpleHeaders) { */

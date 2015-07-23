@@ -35,11 +35,9 @@
 %define api.token.prefix {HTTP_}
 
 %token
-  END 0 "End of File (EOF)"
-  COLON
+  END   0   "End of File (EOF)"
   EOL
-  SP
-  OWS
+  RSP
 ;
 
 %token <int> STATUS_CODE
@@ -62,7 +60,10 @@
 %type <HTTPHeader> header;
 %type <HTTPHeaderMap> header_field;
 
+%printer { yyoutput << $$; } <*>;
+
 %%
+
 %start http_message;
 
 http_message
@@ -79,12 +80,12 @@ http_message
   ;
 
 start_line
-  : status_line   { $$ = $1; }
-  | request_line  { $$ = $1; }
+  : status_line   { $$ = $1; driver._BEGIN_HEADER(); }
+  | request_line  { $$ = $1; driver._BEGIN_HEADER(); }
   ;
 
 status_line
-  : HTTP_VERSION SP STATUS_CODE SP reason_phrase  {
+  : HTTP_VERSION RSP STATUS_CODE RSP reason_phrase  {
   HTTPStartLinePtr sl (new HTTPResponseStartLine ($1, $3, $5));
   $$ = sl;
                                                   }
@@ -93,22 +94,22 @@ status_line
 reason_phrase
   : %empty                          { $$ = "";  }
   | REASON_PHRASE                   { $$ = $1;  }
-  | reason_phrase SP REASON_PHRASE  { $$ = $1 + $3;  }
+  | reason_phrase RSP REASON_PHRASE  { $$ = $1 + $3;  }
   ;
 
 request_line
-  : METHOD SP PATH SP HTTP_VERSION  {
+  : METHOD RSP PATH RSP HTTP_VERSION  {
   HTTPStartLinePtr sl (new HTTPRequestStartLine ($5, $1, $3));
   $$ = sl;
                                     }
   ;
 
 header_field
-  : %empty              { $$ = HTTPHeaderMap {}; }
+  : %empty              { $$ = HTTPHeaderMap {};   }
   | header_field header { $1.emplace($2); $$ = $1; }
   ;
 
-header: FIELD_NAME ":" SP FIELD_VALUE EOL { $$ = HTTPHeader {$1, $4}; }
+header: FIELD_NAME FIELD_VALUE EOL { $$ = HTTPHeader {$1, $2}; }
       ;
 
 %%

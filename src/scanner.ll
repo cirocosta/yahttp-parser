@@ -17,33 +17,33 @@ static yahttp::location loc;
 %}
 
 %option noyywrap nounput batch debug noinput
+%x HEADER
+%x BODY
 
-ALPHA               [\x41-\x5A\x61-\x7A]
-BIT                 [01]
-CHAR                [\x01-\x7F]
-DIGIT               [0-9]
-DQUOTE              \x22
-CR                  \x0D
-LF                  \x0A
-CRLF                {CR}{LF}
-SP                  \x20
-HTAB                \x09
-OCTET               [\x00-\xFF]
+SP                  [ \t]
+RSP                 {SP}+
+OWS                 {SP}*
+
 VCHAR               [\x21-\x7E]
-WSP                 ({SP}|{HTAB})
-OWS                 {WSP}*
-RWS                 {WSP}+
-EOL                 \n
-TCHAR               ("!"|"#"|"$"|"%"|"_"|"+"|"-"|{DIGIT}|{ALPHA})
+OCTET               [\x00-\xFF]
+ALPHA               [a-zA-Z]
+DIGIT               [0-9]
+EOL                 ("\r\n"|"\n")
+PCT_ENC             "%"[0-9A-Fa-f]{2}
+SUB_DELIM           [!$&'\(\)*+,;=]
+PCHAR               {ALPHA}|{DIGIT}|"-"|"."|"_"|"~"|{PCT_ENC}|{SUB_DELIM}|":"|"@"
+SEGMENT             {PCHAR}+
+
+STATUS_CODE         {DIGIT}{3}
 
 HTTP_VERSION        "HTTP/1.1"
 METHOD              ("GET"|"HEAD"|"POST"|"PUT"|"DELETE")
-PATH                "/path"
-STATUS_CODE         ({DIGIT}){3}
-REASON_PHRASE       ({ALPHA})+
+PATH                "/"({SEGMENT}{SEGMENT}*)?
 
-FIELD_NAME          ({TCHAR})+
-FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT}|"://"|"."|"/")*
+FIELD_NAME          [a-zA-Z_\-0-9]+":"
+FIELD_VALUE         {RSP}{VCHAR}+({RSP}{VCHAR})*
+
+REASON_PHRASE       {ALPHA}({RSP}{PCHAR})*
 
 %{
   // Code run each time a pattern is matched.
@@ -57,18 +57,11 @@ FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT}|"://"|"."|"/")*
   loc.step();
 %}
 
-":"             return yahttp::HTTPParser::make_COLON(loc);
+{HTTP_VERSION}  return yahttp::HTTPParser::make_HTTP_VERSION(yytext, loc);
 
-{METHOD}        {
-                  return yahttp::HTTPParser::make_METHOD(
-                      yahttp::HTTPMethodMapping.at(yytext), loc
-                  );
-                }
+{RSP}           return yahttp::HTTPParser::make_RSP(loc);
 
-{HTTP_VERSION}  {
-                  return yahttp::HTTPParser::make_HTTP_VERSION(
-                      "HTTP/1.1", loc);
-                }
+{METHOD}        return yahttp::HTTPParser::make_METHOD(yahttp::HTTPMethodMapping.at(yytext), loc);
 
 {PATH}          return yahttp::HTTPParser::make_PATH(std::string(yytext), loc);
 
@@ -87,25 +80,37 @@ FIELD_VALUE         ({ALPHA}|{DIGIT})({ALPHA}|{DIGIT}|"://"|"."|"/")*
                   return yahttp::HTTPParser::make_EOL(loc);
                 }
 
-{SP}|{HTAB}     loc.step(); return yahttp::HTTPParser::make_SP(loc);
-
-{OWS}           loc.step(); return yahttp::HTTPParser::make_OWS(loc);
-
 {REASON_PHRASE} {
                   return yahttp::HTTPParser::make_REASON_PHRASE(
                     std::string(yytext),loc);
                 }
 
 
-{FIELD_VALUE}   return yahttp::HTTPParser::make_FIELD_VALUE(std::string(yytext), loc);
+<HEADER>{FIELD_VALUE}   return yahttp::HTTPParser::make_FIELD_VALUE(yytext+1, loc);
 
-{FIELD_NAME}    return yahttp::HTTPParser::make_FIELD_NAME(std::string(yytext), loc);
+<HEADER>{FIELD_NAME}    return yahttp::HTTPParser::make_FIELD_NAME(std::string(yytext, 0, yyleng-1), loc);
+
+<HEADER>{EOL}           return yahttp::HTTPParser::make_EOL(loc);
 
 .               driver.error(loc, "Invalid Character");
 
 <<EOF>>         return yahttp::HTTPParser::make_END(loc);
 
 %%
+
+void yahttp::HTTPDriver::_BEGIN_HEADER ()
+{
+  if (trace_scanning)
+    std::cout << "\t---- BEGINNING HEADER STATE ----\n";
+  BEGIN(HEADER);
+}
+
+void yahttp::HTTPDriver::_BEGIN_BODY ()
+{
+  if (trace_scanning)
+    std::cout << "\t---- BEGINNING BODY STATE ----\n";
+  BEGIN(BODY);
+}
 
 void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
 {
