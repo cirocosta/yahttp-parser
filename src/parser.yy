@@ -57,7 +57,6 @@
 %type <HTTPStartLinePtr> start_line;
 %type <HTTPStartLinePtr> request_line;
 %type <HTTPStartLinePtr> status_line;
-%type <std::string> reason_phrase;
 %type <HTTPHeader> header;
 %type <HTTPHeaderMap> header_field;
 %type <HTTPBody> body;
@@ -99,16 +98,10 @@ start_line
   ;
 
 status_line
-  : HTTP_VERSION RSP STATUS_CODE RSP reason_phrase  {
+  : HTTP_VERSION RSP STATUS_CODE RSP REASON_PHRASE  {
   HTTPStartLinePtr sl (new HTTPResponseStartLine ($1, $3, $5));
   $$ = sl;
                                                   }
-  ;
-
-reason_phrase
-  : %empty                          { $$ = "";  }
-  | REASON_PHRASE                   { $$ = $1;  }
-  | reason_phrase RSP REASON_PHRASE  { $$ = $1 + $3;  }
   ;
 
 request_line

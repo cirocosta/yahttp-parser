@@ -40,9 +40,8 @@ TEST(Parser, RequestWithBody) {
   EXPECT_EQ(body_msg, "brbr huehue zueira never ends");
 }
 
-
 TEST(Parser, RequestWithHeadersWithURLs) {
-  bool debug = true;
+  bool debug = false;
   const char* message =
     "GET /path HTTP/1.1\n"
     "Content-Length: 1024\n"
@@ -70,84 +69,58 @@ TEST(Parser, RequestWithHeadersWithURLs) {
   EXPECT_EQ(driver.message->headers["Pragma"], "no-cache");
 }
 
-/* TEST(Parser, RequestWithSimpleHeaders) { */
-/*   bool debug = false; */
-/*   std::string message = */
-/*     "GET /path HTTP/1.1\n" */
-/*     "Content-Length: 1024\n" */
-/*     "Host: 1111\n"; */
+TEST(Parser, ResponseWithHeaders) {
+  bool debug = false;
+  const char* message =
+    "HTTP/1.1 200 Ok\r\n"
+    "Content-Length: 1024\r\n"
+    "\r\n";
 
-/*   HTTPDriver driver(debug, debug); */
-/*   driver.parse_source(message); */
+  HTTPDriver driver(debug, debug);
+  driver.parse_source(message);
 
-/*   EXPECT_TRUE(!driver.result); */
-/*   EXPECT_TRUE(!driver.message.headers.empty()); */
-/*   EXPECT_TRUE(driver.message.start_line.version == "HTTP/1.1"); */
-/*   EXPECT_TRUE(driver.message.start_line.method == HTTPMethod::GET); */
-/*   EXPECT_TRUE(driver.message.start_line.path == "/path"); */
-/*   EXPECT_TRUE(driver.message.headers["Content-Length"] == "1024"); */
-/*   EXPECT_TRUE(driver.message.headers["Host"] == "1111"); */
-/* } */
+  EXPECT_TRUE(!driver.result);
+  EXPECT_TRUE(!driver.message->headers.empty());
+  EXPECT_TRUE(driver.message->start_line->version == "HTTP/1.1");
+  EXPECT_EQ(driver.message->type, HTTPMessageType::Response);
 
-/* TEST(Parser, RequestWithSingleHeader) { */
-/*   bool debug = false; */
-/*   HTTPDriver driver(debug, debug); */
-/*   driver.parse_source("GET /path HTTP/1.1\nContent-Length: 2448\n"); */
+  HTTPResponseStartLine* sl =
+    static_cast<HTTPResponseStartLine*>(driver.message->start_line.get());
 
-/*   EXPECT_TRUE(!driver.result); */
-/*   EXPECT_TRUE(!driver.message.headers.empty()); */
-/*   EXPECT_TRUE(driver.message.start_line.version == "HTTP/1.1"); */
-/*   EXPECT_TRUE(driver.message.start_line.method == HTTPMethod::GET); */
-/*   EXPECT_TRUE(driver.message.start_line.path == "/path"); */
-/*   EXPECT_TRUE(driver.message.headers["Content-Length"] == "2448"); */
-/* } */
+  EXPECT_EQ(sl->status_code, 200);
+  EXPECT_EQ(sl->reason_phrase, "Ok");
 
-/* TEST(Parser, ResponseWithoutHeaders) { */
-/*   bool debug = false; */
-/*   HTTPDriver driver(debug, debug); */
-/*   driver.parse_source("HTTP/1.1 200 OK\n"); */
+  EXPECT_EQ(driver.message->headers["Content-Length"], "1024");
+}
 
-/*   EXPECT_TRUE(!driver.result); */
-/*   EXPECT_TRUE(driver.message.headers.empty()); */
-/*   EXPECT_TRUE(driver.message.start_line.version == "HTTP/1.1"); */
-/*   EXPECT_TRUE(driver.message.start_line.status_code == 200); */
-/*   EXPECT_TRUE(driver.message.start_line.reason_phrase == "OK"); */
-/* } */
+TEST(Parser, ResponseWithBody) {
+  bool debug = false;
+  const char* message =
+    "HTTP/1.1 200 Ok\r\n"
+    "Content-Length: 1024\r\n"
+    "\r\n"
+    "huehue brbr\n"
+    "\t\tzueira never ends";
 
+  HTTPDriver driver(debug, debug);
+  driver.parse_source(message);
 
-/* TEST(Parser, ResponseWithoutHeadersComplex) { */
-/*   bool debug = false; */
-/*   HTTPDriver driver(debug, debug); */
-/*   driver.parse_source("HTTP/1.1 404 Not Found\n"); */
+  EXPECT_TRUE(!driver.result);
+  EXPECT_TRUE(!driver.message->headers.empty());
+  EXPECT_TRUE(driver.message->start_line->version == "HTTP/1.1");
+  EXPECT_EQ(driver.message->type, HTTPMessageType::Response);
 
-/*   EXPECT_TRUE(!driver.result); */
-/*   EXPECT_TRUE(driver.message.headers.empty()); */
-/*   EXPECT_TRUE(driver.message.start_line.version == "HTTP/1.1"); */
-/*   EXPECT_TRUE(driver.message.start_line.status_code == 404); */
-/*   EXPECT_TRUE(driver.message.start_line.reason_phrase == "Not Found"); */
-/* } */
+  HTTPResponseStartLine* sl =
+    static_cast<HTTPResponseStartLine*>(driver.message->start_line.get());
 
-/* TEST(Parser, RequestWithoutHeaders) { */
-/*   bool debug = false; */
-/*   HTTPDriver driver(debug, debug); */
-/*   driver.parse_source("GET /path HTTP/1.1\n"); */
+  EXPECT_EQ(sl->status_code, 200);
+  EXPECT_EQ(sl->reason_phrase, "Ok");
 
-/*   EXPECT_TRUE(!driver.result); */
-/*   EXPECT_TRUE(driver.message.headers.empty()); */
-/*   EXPECT_TRUE(driver.message.start_line.method == HTTPMethod::GET); */
-/*   EXPECT_TRUE(driver.message.start_line.version == "HTTP/1.1"); */
-/*   EXPECT_TRUE(driver.message.start_line.path == "/path"); */
-/* } */
+  EXPECT_EQ(driver.message->headers["Content-Length"], "1024");
 
-/* TEST(Parser, RequestFromAFile) { */
-/*   bool debug = false; */
-/*   HTTPDriver driver(debug, debug); */
-/*   driver.parse("./assets/get-req.txt"); */
+  std::string body_msg (driver.message->body.begin(),
+                        driver.message->body.end());
 
-/*   EXPECT_TRUE(!driver.result); */
-/*   EXPECT_TRUE(driver.message.headers.empty()); */
-/*   EXPECT_TRUE(driver.message.start_line.method == HTTPMethod::GET); */
-/*   EXPECT_TRUE(driver.message.start_line.version == "HTTP/1.1"); */
-/*   EXPECT_TRUE(driver.message.start_line.path == "/path"); */
-/* } */
+  EXPECT_EQ(body_msg, "huehue brbr\n\t\tzueira never ends");
+}
 

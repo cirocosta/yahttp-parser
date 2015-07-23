@@ -45,7 +45,7 @@ FIELD_VALUE         {RSP}{VCHAR}+({RSP}{VCHAR})*
 
 BODY_CONTENT        {OCTET}+
 
-REASON_PHRASE       {ALPHA}({RSP}{PCHAR})*
+REASON_PHRASE       {ALPHA}({OWS}{PCHAR})*
 
 %{
   // Code run each time a pattern is matched.
