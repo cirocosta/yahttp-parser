@@ -60,7 +60,7 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseMessage& mes
 
   o << *res_sl << CRLF
     << message.headers << CRLF
-    << message.body << CRLF;
+    << message.body;
 
   return o;
 }
@@ -72,7 +72,7 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestMessage& mess
 
   o << *req_sl << CRLF
     << message.headers << CRLF
-    << message.body << CRLF;
+    << message.body;
 
   return o;
 }

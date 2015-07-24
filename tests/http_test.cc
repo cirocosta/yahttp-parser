@@ -11,7 +11,7 @@ TEST(Http, HighLevelRequest) {
     "POST /path HTTP/1.1\r\n"
     "Content-Length: 1024\r\n"
     "\r\n"
-    "hue hue brbr\r\n";
+    "hue hue brbr";
 
   std::string bmsg = "hue hue brbr";
 
@@ -34,13 +34,33 @@ TEST(Http, HighLevelRequest) {
   EXPECT_EQ(expected, actual.str());
 }
 
+TEST(Http, RequestWithoutBody) {
+  std::ostringstream actual;
+  const char* expected =
+    "GET /path HTTP/1.1\r\n"
+    "Host: localhost:8080\r\n"
+    "\r\n";
+
+  HTTPRequestStartLine req ("HTTP/1.1", HTTPMethod::GET, "/path");
+
+
+  HTTPRequestMessage req_msg (
+    req,
+    HTTPHeaderMap {{"Host", "localhost:8080"}},
+    HTTPBody {}
+  );
+
+  actual << req_msg;
+  EXPECT_EQ(expected, actual.str());
+}
+
 TEST(Http, SimpleRequest) {
   std::ostringstream actual;
   const char* expected =
     "POST /path HTTP/1.1\r\n"
     "Content-Length: 1024\r\n"
     "\r\n"
-    "hue hue brbr\r\n";
+    "hue hue brbr";
 
   HTTPRequestStartLine req ("HTTP/1.1", HTTPMethod::POST, "/path");
 
@@ -64,7 +84,7 @@ TEST(Http, SimpleResponse) {
     "HTTP/1.1 200 Ok\r\n"
     "Content-Length: 1024\r\n"
     "\r\n"
-    "hue hue brbr\r\n";
+    "hue hue brbr";
 
   HTTPResponseStartLine res {
     "HTTP/1.1",
