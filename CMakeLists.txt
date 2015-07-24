@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.11)
 
 # Turn it ON: -Dtest=ON
 option(test "Include Tests." OFF)
