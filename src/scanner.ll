@@ -41,7 +41,7 @@ METHOD              ("GET"|"HEAD"|"POST"|"PUT"|"DELETE")
 PATH                "/"({SEGMENT}{SEGMENT}*)?
 
 FIELD_NAME          [a-zA-Z_\-0-9]+":"
-FIELD_VALUE         {RSP}{VCHAR}+({RSP}{VCHAR})*
+FIELD_VALUE         {RSP}+[^\r\n]+
 
 BODY_CONTENT        {OCTET}+
 

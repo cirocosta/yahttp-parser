@@ -34,6 +34,7 @@ include_directories(
 add_subdirectory(src/)
 
 if (test)
-    add_subdirectory(tests/)
+  enable_testing()
+  add_subdirectory(tests/)
 endif(test)
 

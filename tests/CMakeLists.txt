@@ -6,6 +6,7 @@ ExternalProject_Add(
   gtest
   GIT_REPOSITORY https://github.com/cirocosta/googletest.git
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
+  UPDATE_COMMAND ""
   INSTALL_COMMAND ""
 )
 
@@ -38,12 +39,20 @@ target_link_libraries(parser_test libgtest
 
 add_test(NAME parser_test COMMAND parser_test)
 
+
+#  --  CHUNKS
+
+add_executable(chunks main_test.cc chunks.cc)
+target_link_libraries(chunks libgtest
+  yahttpparser
+)
+add_test(NAME chunks COMMAND chunks)
+
+
 add_custom_command(
-  TARGET parser_test PRE_BUILD
+  TARGET chunks PRE_BUILD
   COMMAND ${CMAKE_COMMAND}
   -E copy_directory
-  ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:parser_test>/assets
+  ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:chunks>/assets
 )
-
-enable_testing()
 

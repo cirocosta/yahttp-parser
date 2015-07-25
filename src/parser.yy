@@ -113,7 +113,14 @@ request_line
 
 header_field
   : %empty              { $$ = HTTPHeaderMap {};   }
-  | header_field header { $1.emplace($2); $$ = $1; }
+  | header_field header {
+  auto search = $1.find($2.first);
+
+  if (search != $1.end())
+    search->second += ("," + $2.second);
+  else
+    $1.emplace($2); $$ = $1;
+                         }
   ;
 
 header: FIELD_NAME FIELD_VALUE EOL { $$ = HTTPHeader {$1, $2}; }
