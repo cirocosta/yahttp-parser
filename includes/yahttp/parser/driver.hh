@@ -57,6 +57,7 @@ public:
 
   void _BEGIN_HEADER ();
   void _BEGIN_BODY ();
+  void _BEGIN_CHUNKED_BODY ();
 };
 
 }; // ! ns yahttp

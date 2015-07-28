@@ -195,3 +195,35 @@ TEST(Parser, MultipleInputsParse) {
   EXPECT_EQ(body_msg, "brbr huehue zueira never ends");
 }
 
+TEST(Parser, ChunkEncoded) {
+  bool debug = true;
+  const char* message =
+    "HTTP/1.1 200 funky chunky!\r\n"
+    "Server: fakeit/0.9 fakeitbad/1.0\r\n"
+    "Transfer-Encoding: chunked\r\n"
+    "Trailer: chunky-trailer\r\n"
+    "Connection: mooo\r\n"
+    "\r\n"
+    "40\r\n"
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\r\n"
+    "30\r\n"
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\r\n"
+    "000\r\n"
+    "\r\n";
+
+  HTTPDriver driver(debug, debug);
+  driver.parse_source(message);
+
+  ASSERT_EQ(driver.result, 0);
+  ASSERT_EQ(driver.message->headers.empty(), false);
+  ASSERT_EQ(driver.message->headers["Transfer-Encoding"], "chunked");
+
+  std::string body_msg (driver.message->body.begin(),
+                        driver.message->body.end());
+  const char* expected_body =
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+
+  EXPECT_EQ(body_msg, expected_body);
+}
+

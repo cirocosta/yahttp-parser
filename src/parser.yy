@@ -51,7 +51,7 @@
 ;
 
 %token <HTTPMethod> METHOD;
-%token <HTTPBody> BODY_CONTENT;
+%token <HTTPBody> BODY_CONTENT CHUNKED_BODY_CONTENT;
 
 %type <HTTPMessagePtr> http_message http_top;
 %type <HTTPStartLinePtr> start_line;
@@ -83,13 +83,29 @@ http_top
   msg->start_line = $1;
   msg->headers = $3;
   $$ = msg;
-  driver._BEGIN_BODY();
+
+  HTTPHeaderMap::const_iterator it = msg->headers.find("Transfer-Encoding");
+
+  if (it != msg->headers.end() && it->second == "chunked") {
+    driver._BEGIN_CHUNKED_BODY();
+  } else {
+    driver._BEGIN_BODY();
+  }
                                     }
   ;
 
 body
-  : %empty        { $$ = HTTPBody {}; }
-  | BODY_CONTENT  { $$ = $1; }
+  : %empty                    { $$ = HTTPBody {}; }
+  | BODY_CONTENT              { $$ = $1; }
+  | CHUNKED_BODY_CONTENT      { $$ = $1; }
+  | body CHUNKED_BODY_CONTENT {
+  HTTPBody body;
+
+  body.reserve($1.size() + $2.size());
+  body.insert(body.end(), $1.begin(), $1.end());
+  body.insert(body.end(), $2.begin(), $2.end());
+  $$ = body;
+                              }
   ;
 
 start_line

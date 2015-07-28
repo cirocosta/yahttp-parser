@@ -27,9 +27,10 @@ static yahttp::location loc;
 
 %}
 
-%option noyywrap nounput batch debug noinput
+%option noyywrap nounput batch debug
 %x HEADER
 %x BODY
+%x CHUNKED_BODY
 
 SP                  [ \t]
 RSP                 {SP}+
@@ -44,6 +45,7 @@ PCT_ENC             "%"[0-9A-Fa-f]{2}
 SUB_DELIM           [!$&'\(\)*+,;=]
 PCHAR               {ALPHA}|{DIGIT}|"-"|"."|"_"|"~"|{PCT_ENC}|{SUB_DELIM}|":"|"@"
 SEGMENT             {PCHAR}+
+HEX                 [0-9a-fA-F]+
 
 STATUS_CODE         {DIGIT}{3}
 
@@ -55,6 +57,7 @@ FIELD_NAME          [a-zA-Z_\-0-9]+":"
 FIELD_VALUE         {RSP}+[^\r\n]+
 
 BODY_CONTENT        {OCTET}+
+HEXNUM              {HEX}{EOL}
 
 REASON_PHRASE       {ALPHA}({OWS}{PCHAR})*
 
@@ -115,6 +118,22 @@ REASON_PHRASE       {ALPHA}({OWS}{PCHAR})*
                         );
                       }
 
+<CHUNKED_BODY>{HEXNUM}   {
+                            unsigned csize = std::strtoul(yytext, NULL, 16);
+                            yahttp::HTTPBody body;
+
+                            std::cout << "\n\tSIZE: " << csize << "\n";
+
+                            while (csize --> 0)
+                              body.push_back(yyinput());
+
+                            if (yyinput() != '\r' && yyinput() != '\n')
+                              driver.error(loc, "Expected CRLF after chunked-body");
+
+                            return yahttp::HTTPParser::make_CHUNKED_BODY_CONTENT(body, loc);
+                          }
+
+
 .               driver.error(loc, "Invalid Character");
 
 <<EOF>>         {
@@ -135,6 +154,13 @@ void yahttp::HTTPDriver::_BEGIN_BODY ()
   if (trace_scanning)
     std::cout << "\t---- BEGINNING BODY STATE ----\n";
   BEGIN(BODY);
+}
+
+void yahttp::HTTPDriver::_BEGIN_CHUNKED_BODY ()
+{
+  if (trace_scanning)
+    std::cout << "\t---- BEGINNING CHUNKED_BODY STATE ----\n";
+  BEGIN(CHUNKED_BODY);
 }
 
 void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
