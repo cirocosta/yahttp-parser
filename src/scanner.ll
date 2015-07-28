@@ -122,8 +122,6 @@ REASON_PHRASE       {ALPHA}({OWS}{PCHAR})*
                             unsigned csize = std::strtoul(yytext, NULL, 16);
                             yahttp::HTTPBody body;
 
-                            std::cout << "\n\tSIZE: " << csize << "\n";
-
                             while (csize --> 0)
                               body.push_back(yyinput());
 
@@ -168,6 +166,8 @@ void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
   yahttp::in_stream << source;
 
   yy_flex_debug = trace_scanning;
+  if (buffer)
+    yy_delete_buffer(buffer);
   buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
   yy_switch_to_buffer(buffer);
 }

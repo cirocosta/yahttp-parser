@@ -23,13 +23,16 @@ typedef struct yy_buffer_state * YY_BUFFER_STATE;
 class HTTPDriver
 {
 public:
+  // results
   HTTPMessagePtr message;
-  std::shared_ptr<HTTPParser> parser;
   int result;
 
-  std::string file;
-  YY_BUFFER_STATE buffer;
+  // ptrs
+  std::shared_ptr<HTTPParser> parser = nullptr;
+  YY_BUFFER_STATE buffer = nullptr;
 
+  // debugging purposes
+  std::string file;
   bool trace_scanning = false;
   bool trace_parsing = false;
   bool multi_parsing = false;

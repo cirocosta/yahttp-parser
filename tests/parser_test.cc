@@ -196,7 +196,7 @@ TEST(Parser, MultipleInputsParse) {
 }
 
 TEST(Parser, ChunkEncoded) {
-  bool debug = true;
+  bool debug = false;
   const char* message =
     "HTTP/1.1 200 funky chunky!\r\n"
     "Server: fakeit/0.9 fakeitbad/1.0\r\n"
