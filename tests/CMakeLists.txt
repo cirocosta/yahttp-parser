@@ -50,9 +50,9 @@ add_test(NAME chunks_test COMMAND chunks_test)
 
 
 add_custom_command(
-  TARGET chunks PRE_BUILD
+  TARGET chunks_test PRE_BUILD
   COMMAND ${CMAKE_COMMAND}
   -E copy_directory
-  ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:chunks>/assets
+  ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:chunks_test>/assets
 )
 

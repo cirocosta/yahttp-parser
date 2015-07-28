@@ -200,7 +200,7 @@ TEST(Parser, ChunkEncoded) {
   const char* message =
     "HTTP/1.1 200 funky chunky!\r\n"
     "Server: fakeit/0.9 fakeitbad/1.0\r\n"
-    "Transfer-Encoding: chunked\r\n"
+    "Transfer-Encoding:   chunked  \r\n"
     "Trailer: chunky-trailer\r\n"
     "Connection: mooo\r\n"
     "\r\n"

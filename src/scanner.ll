@@ -102,7 +102,16 @@ REASON_PHRASE       {ALPHA}({OWS}{PCHAR})*
                 }
 
 
-<HEADER>{FIELD_VALUE}   return yahttp::HTTPParser::make_FIELD_VALUE(yytext+1, loc);
+<HEADER>{FIELD_VALUE}   {
+                          unsigned i = 0;
+                          unsigned j = yyleng;
+
+                          while (::isspace(yytext[i])) i++;
+                          while (::isspace(yytext[j-1])) j--;
+
+                          return yahttp::HTTPParser::make_FIELD_VALUE(
+                              std::string(yytext, i, j-i), loc);
+                        }
 
 <HEADER>{FIELD_NAME}    {
                           return yahttp::HTTPParser::make_FIELD_NAME(
@@ -186,6 +195,10 @@ void yahttp::HTTPDriver::scan_begin ()
   if (fin) {
     yahttp::in_stream << fin.rdbuf();
     fin.close();
+  } else {
+    std::cerr << "Error (yahttp::HTTPDriver::scan_begin):" << std::endl
+              << "\tCan't find " << file << std::endl;
+    exit(EXIT_FAILURE);
   }
 
   buffer = yy_create_buffer(yyin, YY_BUF_SIZE);

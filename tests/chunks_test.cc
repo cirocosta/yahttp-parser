@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <string>
+#include <fstream>
 
 using namespace yahttp;
 
@@ -27,24 +28,31 @@ std::string get_selfdir ()
 TEST(Chunks, InitialChunk) {
   bool debug = false;
   unsigned size = 0;
-  std::string filepath = get_selfdir() + "/assets/chunks/initial_chunk.txt";
+  std::string path_chunked =
+    get_selfdir() + "/assets/chunks/chunked_apontador_index.html";
+  std::string path_expected =
+    get_selfdir() + "/assets/chunks/apontador_index.html";
+
   HTTPBody::iterator body_it;
   HTTPDriver driver(debug, debug);
 
-  driver.parse(filepath);
+  driver.parse(path_chunked);
 
-  EXPECT_EQ(driver.result, 0);
-  EXPECT_EQ(driver.message->headers.size(), 7);
-  EXPECT_EQ(driver.message->headers["Connection"], "keep-alive,Transfer-Encoding");
+  ASSERT_EQ(driver.result, 0);
+  ASSERT_EQ(driver.message->headers.size(), 7);
+  ASSERT_EQ(driver.message->headers["Connection"],
+            "keep-alive,Transfer-Encoding");
+  ASSERT_EQ(driver.message->headers["Transfer-Encoding"], "chunked");
 
-  body_it = driver.message->body.begin();
-  while (*body_it++ != '\n');
-  size = std::strtoul(
-      std::string(driver.message->body.begin(), body_it).c_str(), NULL, 16);
+  std::ifstream expected_file (path_expected.c_str());
+  std::stringstream expected_body;
 
-  EXPECT_EQ(49152, size);
+  expected_body << expected_file.rdbuf();
 
-  driver.message->body.erase(driver.message->body.begin(), body_it);
+  std::string body_msg (driver.message->body.begin(),
+                        driver.message->body.end());
+
+  EXPECT_EQ(body_msg, expected_body.str());
 }
 
 
