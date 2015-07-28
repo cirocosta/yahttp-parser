@@ -15,10 +15,12 @@
 #undef yywrap
 #define yywrap() 1
 
-std::stringstream in_stream;
+namespace yahttp {
+  std::stringstream in_stream;
+};
 
 #undef YY_INPUT
-#define YY_INPUT(buf, result, max) (result = in_stream.readsome(buf,max))
+#define YY_INPUT(buf, result, max) (result = yahttp::in_stream.readsome(buf,max))
 
 // The location of the current token.
 static yahttp::location loc;
@@ -115,7 +117,9 @@ REASON_PHRASE       {ALPHA}({OWS}{PCHAR})*
 
 .               driver.error(loc, "Invalid Character");
 
-<<EOF>>         return yahttp::HTTPParser::make_END(loc);
+<<EOF>>         {
+                  return yahttp::HTTPParser::make_END(loc);
+                }
 
 %%
 
@@ -135,7 +139,7 @@ void yahttp::HTTPDriver::_BEGIN_BODY ()
 
 void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
 {
-  in_stream << source;
+  yahttp::in_stream << source;
 
   yy_flex_debug = trace_scanning;
   buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
@@ -154,7 +158,7 @@ void yahttp::HTTPDriver::scan_begin ()
   std::ifstream fin (file.c_str());
 
   if (fin) {
-    in_stream << fin.rdbuf();
+    yahttp::in_stream << fin.rdbuf();
     fin.close();
   }
 
@@ -171,6 +175,7 @@ void yahttp::HTTPDriver::scan_end ()
 {
   yy_flush_buffer(buffer);
   yy_delete_buffer(buffer);
+
   if (yyin)
     fclose(yyin);
 }

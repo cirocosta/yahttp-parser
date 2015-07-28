@@ -19,19 +19,37 @@ void HTTPDriver::parse (const std::string &f)
 {
   file = f;
   scan_begin();
-  HTTPParser parser(*this);
-  parser.set_debug_level(trace_parsing);
-  result = parser.parse();
+  parser = std::shared_ptr<HTTPParser>(new HTTPParser(*this));
+  parser->set_debug_level(trace_parsing);
+  result = parser->parse();
   scan_end();
 }
-
 void HTTPDriver::parse_source (const std::string &source)
 {
   scan_begin_source(source);
-  HTTPParser parser(*this);
-  parser.set_debug_level(trace_parsing);
-  result = parser.parse();
+  parser = std::shared_ptr<HTTPParser>(new HTTPParser(*this));
+  parser->set_debug_level(trace_parsing);
+  result = parser->parse();
   scan_end_source();
+}
+
+void HTTPDriver::parse_multi_begin()
+{
+  multi_parsing = true;
+  parser = std::shared_ptr<HTTPParser>(new HTTPParser(*this));
+  parser->set_debug_level(trace_parsing);
+}
+
+void HTTPDriver::parse_multi_push(const std::string& source)
+{
+  scan_begin_source(source);
+}
+
+void HTTPDriver::parse_multi_end()
+{
+  result = parser->parse();
+  scan_end_source();
+  multi_parsing = false;
 }
 
 void HTTPDriver::error (const location& l, const std::string& m)

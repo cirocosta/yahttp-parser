@@ -24,11 +24,11 @@ class HTTPDriver
 {
 public:
   HTTPMessagePtr message;
+  std::shared_ptr<HTTPParser> parser;
   int result;
 
   std::string file;
   YY_BUFFER_STATE buffer;
-  char* src;
 
   bool trace_scanning = false;
   bool trace_parsing = false;
@@ -42,8 +42,9 @@ public:
 public:
   void parse(const std::string& file);
   void parse_source(const std::string& source);
-  /* void parse_multi(const std::string& source); */
-  /* void parse_multi_end(); */
+  void parse_multi_begin();
+  void parse_multi_push(const std::string& source);
+  void parse_multi_end();
 
   void scan_begin();
   void scan_begin_source(const std::string& source);
