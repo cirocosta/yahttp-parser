@@ -42,11 +42,11 @@ add_test(NAME parser_test COMMAND parser_test)
 
 #  --  CHUNKS
 
-add_executable(chunks main_test.cc chunks.cc)
-target_link_libraries(chunks libgtest
+add_executable(chunks_test main_test.cc chunks_test.cc)
+target_link_libraries(chunks_test libgtest
   yahttpparser
 )
-add_test(NAME chunks COMMAND chunks)
+add_test(NAME chunks_test COMMAND chunks_test)
 
 
 add_custom_command(

@@ -154,3 +154,43 @@ TEST(Parser, RequestCollidingHeaders) {
   EXPECT_EQ(driver.message->headers["Pragma"], "no-cache");
 }
 
+/* TEST(Parser, MultipleInputsParse) { */
+/*   bool debug = true; */
+/*   HTTPDriver driver(debug, debug, true); */
+
+/*   const char* message1 = */
+/*     "GET /path HTTP/1.1\n" */
+/*     "Content-Length: 1024\n"; */
+
+/*   const char* message2 = */
+/*     "Location: https://facebook.com/\n" */
+/*     "Pragma: no-cache\n" */
+/*     "\n" */
+/*     "brbr huehue zueira never ends"; */
+
+/*   driver.parse_multi(message1); */
+/*   driver.parse_multi(message2); */
+/*   driver.parse_multi_end(); */
+
+/*   EXPECT_TRUE(!driver.result); */
+/*   EXPECT_TRUE(!driver.message->headers.empty()); */
+/*   EXPECT_TRUE(driver.message->start_line->version == "HTTP/1.1"); */
+
+/*   EXPECT_EQ(driver.message->type, HTTPMessageType::Request); */
+
+/*   HTTPRequestStartLine* sl = */
+/*     static_cast<HTTPRequestStartLine*>(driver.message->start_line.get()); */
+
+/*   EXPECT_TRUE(sl->method == HTTPMethod::GET); */
+/*   EXPECT_EQ(sl->path, "/path"); */
+
+/*   EXPECT_EQ(driver.message->headers["Content-Length"], "1024"); */
+/*   EXPECT_EQ(driver.message->headers["Location"], "https://facebook.com/"); */
+/*   EXPECT_EQ(driver.message->headers["Pragma"], "no-cache"); */
+
+/*   std::string body_msg (driver.message->body.begin(), */
+/*                         driver.message->body.end()); */
+
+/*   EXPECT_EQ(body_msg, "brbr huehue zueira never ends"); */
+/* } */
+

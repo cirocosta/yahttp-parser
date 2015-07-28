@@ -4,12 +4,21 @@
 #include <climits>
 #include <cstdlib>
 #include <string>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <iterator>
 
 #include "yahttp/parser/driver.hh"
 #include "parser.hh"
 
 #undef yywrap
 #define yywrap() 1
+
+std::stringstream in_stream;
+
+#undef YY_INPUT
+#define YY_INPUT(buf, result, max) (result = in_stream.readsome(buf,max))
 
 // The location of the current token.
 static yahttp::location loc;
@@ -126,28 +135,27 @@ void yahttp::HTTPDriver::_BEGIN_BODY ()
 
 void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
 {
-  src = new char[source.size() + 1];
-  std::copy(source.begin(), source.end(), src);
-  src[source.size()] = '\0';
+  in_stream << source;
 
   yy_flex_debug = trace_scanning;
-  buffer = yy_scan_string(src);
+  buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
+  yy_switch_to_buffer(buffer);
 }
 
 void yahttp::HTTPDriver::scan_end_source ()
 {
   yy_delete_buffer(buffer);
-  delete[] src;
 }
 
 
 void yahttp::HTTPDriver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
+  std::ifstream fin (file.c_str());
 
-  if (!(yyin = fopen(file.c_str(), "r"))) {
-    error("Can't open " + file + ": " + strerror(errno));
-    exit(EXIT_FAILURE);
+  if (fin) {
+    in_stream << fin.rdbuf();
+    fin.close();
   }
 
   buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
@@ -163,6 +171,7 @@ void yahttp::HTTPDriver::scan_end ()
 {
   yy_flush_buffer(buffer);
   yy_delete_buffer(buffer);
-  fclose(yyin);
+  if (yyin)
+    fclose(yyin);
 }
 

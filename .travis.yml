@@ -37,7 +37,9 @@ before_script:
   - make
 
 script:
-  - valgrind --leak-check=yes --error-exitcode=1 ./tests/http_test && valgrind --leak-check=yes --error-exitcode=1 ./tests/parser_test
+  - valgrind --leak-check=yes --error-exitcode=1 ./tests/http_test
+  - valgrind --leak-check=yes --error-exitcode=1 ./tests/parser_test
+  - valgrind --leak-check=yes --error-exitcode=1 ./tests/chunks_test
 
 notifications:
   email: false

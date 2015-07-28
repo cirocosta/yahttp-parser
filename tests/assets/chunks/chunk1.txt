@@ -1,0 +1,22 @@
+, reservas e facilidades online Encontre endereços, telefones, avaliações e recomendações de locais em sua cidade"/>
+    <meta property="og:site_name" content="Apontador" />
+    <meta property="og:title" content="Encontre Locais, Endereços, telefones e mapas de" />
+    <meta property="og:url" content="http://www.apontador.com.br" />
+    <meta property="fb:app_id" content="203344445764" />
+    <meta property="og:image" content="https://clientmanager-a.akamaihd.net/prod/home/images/logonovo_apontador200.jpg?v=70" />
+    <meta name="msApplication-ID" content="App" />
+    <meta name="msApplication-PackageFamilyName" content="DCD58754.Apontador_abzrag7ex6tmw" />
+    <meta name="apontador:page-type" content="home" />
+
+    <link rel="shortcut icon" href="https://clientmanager-a.akamaihd.net/prod/home/images/favicon.png?v=70" />
+
+
+
+    <script id="navegg" type="text/javascript" src="//tag.navdmp.com/tm33842.js"></script>
+
+    <script type="text/javascript" src="http://tru.webelapp.com/mailNotification.php?st=e11570d0-cf3c-4892-8ef2-f0216e29c6c7&t=pagina"></script>
+
+    <script>
+        var apontador = apontador || {};
+        (function(){
+            apontador.config = { virtualPath : '', siteId : 'apto-ws01', disabledFeatures : '', staticServer: 'https://clientmanager-a.akamaihd.net/prod/home', locale: 'pt-BR', accessToken: '7c28dc0b-0190-4522-8842-d91fb1a5d3de', blankPage:

@@ -1,0 +1,30 @@
+                <p class="home_label-where--example">Um endereço específico, bairro ou cidade.</p>
+                </div>
+            </div>
+        </div>
+        <div id="home-banner-content" class="home_evaluation-content">
+            <div class="last-visit">
+                <div class="place-title sprite-home_evaluation ultimo">último local visitado por você</div>
+                <div class="place-card-info">
+                    <a href="#">
+                        <figure class="place_card-image">
+                        </figure>
+                        <div class="info">
+                            <p class="place_card-title"></p>
+                            <p class="address place_card-address"></p>
+                            <div class="place_card-rating"></div>
+                            <p class="review-number place_card-eview_number"></p>
+                            <p class="view-phone place_card-view_phone"></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="write-review">
+                <div class="place-title sprite-home_evaluation qualifique">qualifique este local</div>
+                <div class="write-box">
+                    <div class="box_evaluation">
+                        <p class="message_home_evaluation-success"><strong>pronto!</strong> Sua avaliação vai facilitar o dia de muita gente!</p>
+                        <div class="box_evaluation--content">
+                            <h2>o que você achou - <strong class="place_review-title"></strong>? </h2>
+
+

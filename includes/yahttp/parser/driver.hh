@@ -30,17 +30,20 @@ public:
   YY_BUFFER_STATE buffer;
   char* src;
 
-  bool trace_scanning;
-  bool trace_parsing;
+  bool trace_scanning = false;
+  bool trace_parsing = false;
+  bool multi_parsing = false;
 
 public:
   HTTPDriver();
-  HTTPDriver(bool ts, bool tp);
+  HTTPDriver(bool ts = false, bool tp = false, bool mp = false);
   virtual ~HTTPDriver();
 
 public:
   void parse(const std::string& file);
-  void parse_source(const std::string& file);
+  void parse_source(const std::string& source);
+  /* void parse_multi(const std::string& source); */
+  /* void parse_multi_end(); */
 
   void scan_begin();
   void scan_begin_source(const std::string& source);

@@ -4,11 +4,10 @@
 namespace yahttp {
 
 HTTPDriver::HTTPDriver ()
-  : trace_scanning(false), trace_parsing(false)
 { }
 
-HTTPDriver::HTTPDriver (bool ts, bool tp)
-  : trace_scanning(ts), trace_parsing(tp)
+HTTPDriver::HTTPDriver (bool ts, bool tp, bool mp)
+  : trace_scanning(ts), trace_parsing(tp), multi_parsing(mp)
 { }
 
 HTTPDriver::~HTTPDriver()
