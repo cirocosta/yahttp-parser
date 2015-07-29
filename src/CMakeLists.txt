@@ -2,9 +2,9 @@ BISON_TARGET(MyParser parser.yy ${CMAKE_CURRENT_BINARY_DIR}/parser.cc COMPILE_FL
 FLEX_TARGET(MyScanner scanner.ll ${CMAKE_CURRENT_BINARY_DIR}/scanner.cc)
 ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_library(http HTTP.cc)
+set(INCLUDES "${INCLUDES}" "${CMAKE_CURRENT_BINARY_DIR}" PARENT_SCOPE)
+include_directories(${INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(yahttpparser
   ${FLEX_MyScanner_OUTPUTS}
@@ -13,5 +13,5 @@ add_library(yahttpparser
   driver.cc
 )
 
-target_link_libraries(yahttpparser)
+set(LIBS "yahttpparser" PARENT_SCOPE)
 

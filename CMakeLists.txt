@@ -21,20 +21,38 @@ else()
     message(STATUS "Please use a different C++ compiler.")
 endif()
 
+
+#     --    SOURCE
+
 find_package(BISON)
 find_package(FLEX)
 
-
-include_directories(
-  ${CMAKE_CURRENT_BINARY_DIR}/src
-  ${PROJECT_SOURCE_DIR}/src
-  ${PROJECT_SOURCE_DIR}/includes
-)
-
+set(INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 add_subdirectory(src/)
 
+
+#     --    GLOBAL VARIABLES
+
+set(${PROJECT_NAME}_INCLUDES ${INCLUDES}
+    CACHE INTERNAL
+    "${PROJECT_NAME}: Include Directories"
+    FORCE
+)
+
+set(${PROJECT_NAME}_LIBS ${LIBS}
+    CACHE INTERNAL
+    "${PROJECT_NAME}: Link Libraries"
+    FORCE
+)
+
+
+#     --    TESTING
+
 if (test)
+  add_subdirectory(lib/googletest)
   enable_testing()
+  include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
   add_subdirectory(tests/)
 endif(test)
 
