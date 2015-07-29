@@ -170,52 +170,27 @@ void yahttp::HTTPDriver::_BEGIN_CHUNKED_BODY ()
   BEGIN(CHUNKED_BODY);
 }
 
-void yahttp::HTTPDriver::scan_begin_source (const std::string& source)
+void yahttp::HTTPDriver::scan_begin (std::stringstream& source) const
 {
-  yahttp::in_stream << source;
+  yahttp::in_stream = std::move(source);
 
   yy_flex_debug = trace_scanning;
+
   if (buffer)
     yy_delete_buffer(buffer);
+
   buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
   yy_switch_to_buffer(buffer);
 }
 
-void yahttp::HTTPDriver::scan_end_source ()
+void yahttp::HTTPDriver::scan_end ()
 {
-  yy_delete_buffer(buffer);
-}
-
-
-void yahttp::HTTPDriver::scan_begin ()
-{
-  yy_flex_debug = trace_scanning;
-  std::ifstream fin (file.c_str());
-
-  if (fin) {
-    yahttp::in_stream << fin.rdbuf();
-    fin.close();
-  } else {
-    std::cerr << "Error (yahttp::HTTPDriver::scan_begin):" << std::endl
-              << "\tCan't find " << file << std::endl;
-    exit(EXIT_FAILURE);
-  }
-
-  buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
-  yy_switch_to_buffer(buffer);
+  if (buffer)
+    yy_delete_buffer(buffer);
 }
 
 void yahttp::HTTPDriver::scan_destroy ()
 {
   yylex_destroy();
-}
-
-void yahttp::HTTPDriver::scan_end ()
-{
-  yy_flush_buffer(buffer);
-  yy_delete_buffer(buffer);
-
-  if (yyin)
-    fclose(yyin);
 }
 

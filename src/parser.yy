@@ -17,11 +17,6 @@
 %param { HTTPDriver& driver }
 
 %locations
-%initial-action
-{
-  // Initialize the initial location
-  @$.begin.filename = @$.end.filename = &driver.file;
-};
 
 %define parse.trace
 %define parse.error verbose

@@ -16,7 +16,7 @@ TEST(Parser, RequestWithBody) {
     "brbr huehue zueira never ends";
 
   HTTPDriver driver(debug, debug);
-  driver.parse_source(message);
+  driver.parse(std::string(message));
 
   EXPECT_TRUE(!driver.result);
   EXPECT_TRUE(!driver.message->headers.empty());
@@ -50,7 +50,7 @@ TEST(Parser, RequestWithHeadersWithURLs) {
     "\n";
 
   HTTPDriver driver(debug, debug);
-  driver.parse_source(message);
+  driver.parse(message);
 
   EXPECT_TRUE(!driver.result);
   EXPECT_TRUE(!driver.message->headers.empty());
@@ -77,7 +77,7 @@ TEST(Parser, ResponseWithHeaders) {
     "\r\n";
 
   HTTPDriver driver(debug, debug);
-  driver.parse_source(message);
+  driver.parse(message);
 
   EXPECT_TRUE(!driver.result);
   EXPECT_TRUE(!driver.message->headers.empty());
@@ -103,7 +103,7 @@ TEST(Parser, ResponseWithBody) {
     "\t\tzueira never ends";
 
   HTTPDriver driver(debug, debug);
-  driver.parse_source(message);
+  driver.parse(message);
 
   EXPECT_TRUE(!driver.result);
   EXPECT_TRUE(!driver.message->headers.empty());
@@ -135,7 +135,7 @@ TEST(Parser, RequestCollidingHeaders) {
     "\n";
 
   HTTPDriver driver(debug, debug);
-  driver.parse_source(message);
+  driver.parse(message);
 
   EXPECT_TRUE(!driver.result);
   EXPECT_TRUE(!driver.message->headers.empty());
@@ -212,7 +212,7 @@ TEST(Parser, ChunkEncoded) {
     "\r\n";
 
   HTTPDriver driver(debug, debug);
-  driver.parse_source(message);
+  driver.parse(message);
 
   ASSERT_EQ(driver.result, 0);
   ASSERT_EQ(driver.message->headers.empty(), false);
