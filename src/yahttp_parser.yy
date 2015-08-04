@@ -2,6 +2,7 @@
 %require "3.0.4"
 
 %defines
+%define api.prefix {yahttp}
 %define api.namespace {yahttp}
 %define parser_class_name {HTTPParser}
 %define api.token.constructor
@@ -25,6 +26,10 @@
 {
 #include "yahttp/parser/driver.hh"
 #include <string>
+#define YY_DECL \
+  yahttp::HTTPParser::symbol_type yylex (yahttp::HTTPDriver& driver)
+
+YY_DECL;
 }
 
 %define api.token.prefix {HTTP_}
@@ -143,4 +148,6 @@ void yahttp::HTTPParser::error (const location_type& l, const std::string& m)
 {
   driver.error(l, m);
 }
+
+#undef YY_DECL
 

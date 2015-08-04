@@ -30,9 +30,16 @@ $ make && make test
 export BISON_PKGDATADIR=/usr/local/share/bison/data
 ```
 
+## CMake
+
+```
+yahtml-parser_INCLUDES  : include directories
+yahtml-parser_LIBS      : libs to link against
+```
+
 ## HTTP 1.1
 
-If you wish to get in touch with the spec, take a look at:
+If you wish to get in touch with the spec, take a look at
 
 -   RFC7230 - HTTP/1.1: Message Syntax and Routing - low-level message parsing and connection management
 -   RFC7231 - HTTP/1.1: Semantics and Content - methods, status codes and headers

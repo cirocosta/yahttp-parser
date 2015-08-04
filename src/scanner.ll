@@ -10,10 +10,15 @@
 #include <iterator>
 
 #include "yahttp/parser/driver.hh"
-#include "parser.hh"
+#include "yahttp_parser.hh"
 
 #undef yywrap
 #define yywrap() 1
+
+#define YY_DECL \
+  yahttp::HTTPParser::symbol_type yylex (yahttp::HTTPDriver& driver)
+
+YY_DECL;
 
 namespace yahttp {
   std::stringstream in_stream;
@@ -28,6 +33,7 @@ static yahttp::location loc;
 %}
 
 %option noyywrap nounput batch debug
+%option prefix="yahttp"
 %x HEADER
 %x BODY
 %x CHUNKED_BODY
@@ -193,4 +199,7 @@ void yahttp::HTTPDriver::scan_destroy ()
 {
   yylex_destroy();
 }
+
+
+#undef YY_DECL
 

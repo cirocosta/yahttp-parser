@@ -6,13 +6,9 @@
 #include <sstream>
 #include <memory>
 
-#include "parser.hh"
+#include "yahttp_parser.hh"
 #include "yahttp/HTTP.hh"
 
-#define YY_DECL \
-  yahttp::HTTPParser::symbol_type yylex (yahttp::HTTPDriver& driver)
-
-YY_DECL;
 
 namespace yahttp {
 
