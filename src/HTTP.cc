@@ -1,6 +1,7 @@
 #include "yahttp/HTTP.hh"
 
-namespace yahttp {
+namespace yahttp
+{
 
 static const std::string CRLF = "\r\n";
 static const std::string SP = " ";
@@ -12,20 +13,18 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPMethod& method)
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestStartLine& req)
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPRequestStartLine& req)
 {
-  o << req.method << SP
-    << req.path << SP
-    << req.version;
+  o << req.method << SP << req.path << SP << req.version;
 
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseStartLine& res)
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPResponseStartLine& res)
 {
-  o << res.version << SP
-    << res.status_code << SP
-    << res.reason_phrase;
+  o << res.version << SP << res.status_code << SP << res.reason_phrase;
 
   return o;
 }
@@ -47,32 +46,29 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPHeaderMap& headers)
 
 std::ostream& operator<<(std::ostream& o, const yahttp::HTTPBody& body)
 {
-  std::copy(body.begin(), body.end(),
-            std::ostream_iterator<char>(o, ""));
+  std::copy(body.begin(), body.end(), std::ostream_iterator<char>(o, ""));
 
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const yahttp::HTTPResponseMessage& message)
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPResponseMessage& message)
 {
   yahttp::HTTPResponseStartLine* res_sl =
-    static_cast<yahttp::HTTPResponseStartLine*>(message.start_line.get());
+      static_cast<yahttp::HTTPResponseStartLine*>(message.start_line.get());
 
-  o << *res_sl << CRLF
-    << message.headers << CRLF
-    << message.body;
+  o << *res_sl << CRLF << message.headers << CRLF << message.body;
 
   return o;
 }
 
-std::ostream& operator<<(std::ostream& o, const yahttp::HTTPRequestMessage& message)
+std::ostream& operator<<(std::ostream& o,
+                         const yahttp::HTTPRequestMessage& message)
 {
   yahttp::HTTPRequestStartLine* req_sl =
-    static_cast<yahttp::HTTPRequestStartLine*>(message.start_line.get());
+      static_cast<yahttp::HTTPRequestStartLine*>(message.start_line.get());
 
-  o << *req_sl << CRLF
-    << message.headers << CRLF
-    << message.body;
+  o << *req_sl << CRLF << message.headers << CRLF << message.body;
 
   return o;
 }
@@ -115,5 +111,4 @@ std::ostream& operator<<(std::ostream& o, const yahttp::HTTPMessagePtr& msg)
 
   return o;
 }
-
 };

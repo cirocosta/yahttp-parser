@@ -1,45 +1,50 @@
 #include "yahttp/parser/driver.hh"
 
-namespace yahttp {
-
-HTTPDriver::HTTPDriver ()
-{ }
-
-HTTPDriver::HTTPDriver (bool ts, bool tp, bool mp)
-  : trace_scanning(ts), trace_parsing(tp), multi_parsing(mp)
-{ }
-
-HTTPDriver::~HTTPDriver()
+namespace yahttp
 {
-  scan_destroy();
+
+HTTPDriver::HTTPDriver() {}
+
+HTTPDriver::HTTPDriver(bool ts, bool tp, bool mp)
+    : trace_scanning(ts), trace_parsing(tp), multi_parsing(mp)
+{
 }
 
-void HTTPDriver::parse (std::string& source)
+HTTPDriver::~HTTPDriver() { scan_destroy(); }
+
+void HTTPDriver::parse(const char* source)
 {
   std::stringstream ss;
 
-  ss << source;
+  ss.write(source, strlen(source));
   parse(ss);
 }
 
-void HTTPDriver::parse (std::stringstream& source)
+void HTTPDriver::parse(const char* source, const size_t len)
 {
-  scan_begin(source);
-  parser = std::shared_ptr<HTTPParser>(new HTTPParser(*this));
-  parser->set_debug_level(trace_parsing);
-  result = parser->parse();
-  scan_end();
+  std::stringstream ss;
+
+  ss.write(source, len);
+  parse(ss);
 }
 
-void HTTPDriver::error (const location& l, const std::string& m)
+void HTTPDriver::parse(std::ifstream& source)
+{
+}
+
+void HTTPDriver::parse(std::stringstream& source)
+{
+  scan_begin(source);
+  HTTPParser parser(*this);
+  parser.set_debug_level(trace_parsing);
+  result = parser.parse();
+}
+
+void HTTPDriver::error(const location& l, const std::string& m)
 {
   std::cerr << l << ": " << m << std::endl;
 }
 
-void HTTPDriver::error (const std::string& m)
-{
-  std::cerr << m << std::endl;
-}
+void HTTPDriver::error(const std::string& m) { std::cerr << m << std::endl; }
 
 }; // ! ns yahttp
-

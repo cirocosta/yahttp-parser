@@ -22,10 +22,16 @@ YY_DECL;
 
 namespace yahttp {
   std::stringstream in_stream;
+  size_t in_stream_count;
 };
 
 #undef YY_INPUT
-#define YY_INPUT(buf, result, max) (result = yahttp::in_stream.readsome(buf,max))
+#define YY_INPUT(buf, result, max) do { \
+  yahttp::in_stream.read(buf, max); \
+  result = yahttp::in_stream.gcount(); \
+  } while (0)
+
+
 
 // The location of the current token.
 static yahttp::location loc;
@@ -179,25 +185,12 @@ void yahttp::HTTPDriver::_BEGIN_CHUNKED_BODY ()
 void yahttp::HTTPDriver::scan_begin (std::stringstream& source) const
 {
   yahttp::in_stream = std::move(source);
-
-  yy_flex_debug = trace_scanning;
-
-  if (buffer)
-    yy_delete_buffer(buffer);
-
-  buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
-  yy_switch_to_buffer(buffer);
+  yahttp_flex_debug = trace_scanning;
 }
 
-void yahttp::HTTPDriver::scan_end ()
+void yahttp::HTTPDriver::scan_destroy () const
 {
-  if (buffer)
-    yy_delete_buffer(buffer);
-}
-
-void yahttp::HTTPDriver::scan_destroy ()
-{
-  yylex_destroy();
+  yahttplex_destroy();
 }
 
 
