@@ -187,6 +187,11 @@ void yahttp::HTTPDriver::scan_begin (std::istream* source) const
   yahttp_flex_debug = trace_scanning;
 }
 
+void yahttp::HTTPDriver::scan_end () const
+{
+  yahttp::in_stream = nullptr;
+}
+
 void yahttp::HTTPDriver::scan_destroy () const
 {
   yahttplex_destroy();

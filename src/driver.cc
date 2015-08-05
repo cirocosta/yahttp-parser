@@ -30,8 +30,6 @@ void HTTPDriver::parse(const char* source, const size_t len)
 
 void HTTPDriver::parse(std::ifstream& file)
 {
-  std::stringstream ss;
-
   if (!file)
     throw std::runtime_error("could'nt find file");
 
@@ -39,6 +37,7 @@ void HTTPDriver::parse(std::ifstream& file)
   HTTPParser parser(*this);
   parser.set_debug_level(trace_parsing);
   result = parser.parse();
+  scan_end();
 }
 
 void HTTPDriver::parse(std::stringstream& source)
@@ -47,6 +46,7 @@ void HTTPDriver::parse(std::stringstream& source)
   HTTPParser parser(*this);
   parser.set_debug_level(trace_parsing);
   result = parser.parse();
+  scan_end();
 }
 
 void HTTPDriver::error(const location& l, const std::string& m)
@@ -57,3 +57,4 @@ void HTTPDriver::error(const location& l, const std::string& m)
 void HTTPDriver::error(const std::string& m) { std::cerr << m << std::endl; }
 
 }; // ! ns yahttp
+

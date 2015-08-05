@@ -7,15 +7,12 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <memory>
 
 #include "yahttp_parser.hh"
 #include "yahttp/HTTP.hh"
 
 namespace yahttp
 {
-
-typedef std::shared_ptr<std::istream> IStreamPtr;
 
 /**
  * Public Interface to the HTTP Parser
@@ -44,6 +41,7 @@ public:
   void parse(std::ifstream& buf);
   void scan_begin(std::istream* source) const;
   void scan_destroy() const;
+  void scan_end() const;
 
   void error(const yahttp::location& l, const std::string& m);
   void error(const std::string& m);
