@@ -154,6 +154,7 @@ TEST(Parser, RequestCollidingHeaders) {
   EXPECT_EQ(driver.message->headers["Pragma"], "no-cache");
 }
 
+// not currently supported.
 /* TEST(Parser, MultipleInputsParse) { */
 /*   bool debug = false; */
 /*   HTTPDriver driver(debug, debug, true); */
@@ -168,12 +169,10 @@ TEST(Parser, RequestCollidingHeaders) {
 /*     "\n" */
 /*     "brbr huehue zueira never ends"; */
 
-/*   driver.parse_multi_begin(); */
-/*   driver.parse_multi_push(message1); */
-/*   driver.parse_multi_push(message2); */
-/*   driver.parse_multi_end(); */
+/*   driver.parse(message1); */
+/*   driver.parse(message2); */
 
-/*   EXPECT_TRUE(!driver.result); */
+/*   ASSERT_EQ(driver.result, 0); */
 /*   EXPECT_TRUE(!driver.message->headers.empty()); */
 /*   EXPECT_TRUE(driver.message->start_line->version == "HTTP/1.1"); */
 
