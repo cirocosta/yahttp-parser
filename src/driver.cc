@@ -28,8 +28,25 @@ void HTTPDriver::parse(const char* source, const size_t len)
   parse(ss);
 }
 
-void HTTPDriver::parse(std::ifstream& source)
+void HTTPDriver::parse(std::ifstream& file)
 {
+  std::stringstream ss;
+
+  if (!file)
+    throw std::runtime_error("could'nt find file");
+
+  file.seekg(0, file.end);
+  std::streampos length = file.tellg();
+  file.seekg(0, file.beg);
+
+  std::vector<char> data (length);
+  char* begin = &*data.begin();
+
+  file.read(begin, length);
+  file.close();
+
+  ss.write(begin, length);
+  parse(ss);
 }
 
 void HTTPDriver::parse(std::stringstream& source)

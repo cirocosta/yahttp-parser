@@ -28,33 +28,29 @@ std::string get_selfdir()
 
 TEST(Chunks, InitialChunk)
 {
-  std::stringstream ss;
   bool debug = false;
   unsigned size = 0;
   std::ifstream file(get_selfdir() +
-                         "/assets/chunks/chunked_apontador_index.html");
-
-  ss << file.rdbuf();
-  file.close();
+                     "/assets/chunks/chunked_apontador_index.html");
 
   HTTPDriver driver(debug, debug);
-  driver.parse(ss);
+  driver.parse(file);
+
   ASSERT_EQ(driver.result, 0);
+  ASSERT_EQ(driver.message->headers.size(), 7);
+  ASSERT_EQ(driver.message->headers["Connection"],
+            "keep-alive,Transfer-Encoding");
+  ASSERT_EQ(driver.message->headers["Transfer-Encoding"], "chunked");
 
-  /* ASSERT_EQ(driver.message->headers.size(), 7); */
-  /* ASSERT_EQ(driver.message->headers["Connection"], */
-  /*           "keep-alive,Transfer-Encoding"); */
-  /* ASSERT_EQ(driver.message->headers["Transfer-Encoding"], "chunked"); */
+  std::fstream expected_file(
+      get_selfdir() + "/assets/chunks/apontador_index.html", std::ios::in);
 
-  /* std::fstream expected_file( */
-  /*     get_selfdir() + "/assets/chunks/apontador_index.html", std::ios::in);
-   */
-  /* std::stringstream expected_body; */
+  std::stringstream expected_body;
 
-  /* expected_body << expected_file.rdbuf(); */
+  expected_body << expected_file.rdbuf();
 
-  /* std::string body_msg(driver.message->body.begin(), */
-  /*                      driver.message->body.end()); */
+  std::string body_msg(driver.message->body.begin(),
+                       driver.message->body.end());
 
-  /* EXPECT_EQ(body_msg, expected_body.str()); */
+  EXPECT_EQ(body_msg, expected_body.str());
 }
