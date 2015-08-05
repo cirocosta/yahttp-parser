@@ -1,6 +1,7 @@
 #ifndef YAHTTP__DRIVER_HH
 #define YAHTTP__DRIVER_HH
 
+#include <cstring>
 #include <string>
 #include <map>
 #include <vector>
@@ -13,6 +14,8 @@
 
 namespace yahttp
 {
+
+typedef std::shared_ptr<std::istream> IStreamPtr;
 
 /**
  * Public Interface to the HTTP Parser
@@ -39,7 +42,7 @@ public:
   void parse(const char* source, const size_t len);
   void parse(std::stringstream& buf);
   void parse(std::ifstream& buf);
-  void scan_begin(std::stringstream& source) const;
+  void scan_begin(std::istream* source) const;
   void scan_destroy() const;
 
   void error(const yahttp::location& l, const std::string& m);

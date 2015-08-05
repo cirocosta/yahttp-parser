@@ -4,8 +4,8 @@
 #include <climits>
 #include <cstdlib>
 #include <string>
-#include <sstream>
-#include <fstream>
+#include <istream>
+#include <memory>
 #include <algorithm>
 #include <iterator>
 
@@ -21,14 +21,13 @@
 YY_DECL;
 
 namespace yahttp {
-  std::stringstream in_stream;
-  size_t in_stream_count;
+  std::istream* in_stream;
 };
 
 #undef YY_INPUT
 #define YY_INPUT(buf, result, max) do { \
-  yahttp::in_stream.read(buf, max); \
-  result = yahttp::in_stream.gcount(); \
+  yahttp::in_stream->read(buf, max); \
+  result = yahttp::in_stream->gcount(); \
   } while (0)
 
 
@@ -182,9 +181,9 @@ void yahttp::HTTPDriver::_BEGIN_CHUNKED_BODY ()
   BEGIN(CHUNKED_BODY);
 }
 
-void yahttp::HTTPDriver::scan_begin (std::stringstream& source) const
+void yahttp::HTTPDriver::scan_begin (std::istream* source) const
 {
-  yahttp::in_stream = std::move(source);
+  yahttp::in_stream = source;
   yahttp_flex_debug = trace_scanning;
 }
 
